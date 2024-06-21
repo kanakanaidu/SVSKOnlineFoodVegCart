@@ -101,7 +101,7 @@ const ItemPage = () => {
               <div className="">
                 <span className="sm:text-sm text-green-600">Special Price</span>
                 <p className="text-lg sm:text-2xl text-textColor">
-                  $ {item.price}
+                  ₹ {item.price}
                 </p>
               </div>
               <div className="">

@@ -123,7 +123,7 @@ const Header = () => {
             alt="Logo Image"
           />
           <p className="hidden sm:flex text-headingColor text-xl font-bold">
-            Fruitsify
+            SVSK Online Store
           </p>
         </Link>
         <Search className="max-md:hidden" />

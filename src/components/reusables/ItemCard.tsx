@@ -48,7 +48,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
         <p className="text-xs xs:text-sm truncate">{item.description}</p>
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center text-sm font-sans">
           <p className="text-xs xs:text-sm font-medium">
-            Price - $ <span className="font-semibold">{item.price}</span>
+            Price - ₹ <span className="font-semibold">{item.price}</span>
           </p>
           <p className="text-xs xs:text-sm font-medium">
             Calories - <span className="font-semibold">{item.calories}</span>

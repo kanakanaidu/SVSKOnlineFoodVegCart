@@ -53,9 +53,9 @@ const HeroContainer = () => {
           Get Your Products in <span className="text-primary">Minutes.</span>
         </p>
         <p className="font-medium text-base xl:text-lg">
-          Welcome to Fruitsify, your one-stop online destination for all things
+          Welcome to SVSK Online Store, your one-stop online destination for all things
           <span className="font-semibold"> fresh and delicious</span>! At
-          Fruitsify, we take pride in delivering the finest selection of fruits,
+          SVSK Online Store, we take pride in delivering the finest selection of fruits,
           vegetables, meat, ice creams, and cold drinks right to your doorstep.
         </p>
 

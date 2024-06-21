@@ -1,10 +1,10 @@
-# Fruitsify - Food E-Commerce App built with React and Firebase
+# SVSK Online Store - Food E-Commerce App built with React and Firebase
 
-Fruitsify is a food e-commerce app that allows users to browse and search a variety of food products, including fruits, vegetables, rice, and more. The project uses modern web development technologies and libraries to provide a seamless shopping experience.
+SVSK Online Store is a food e-commerce app that allows users to browse and search a variety of food products, including fruits, vegetables, rice, and more. The project uses modern web development technologies and libraries to provide a seamless shopping experience.
 
 ## Demo
 
-Check out the live demo deployed on Vercel: [Food Ecommerce App(Fruitsify)](https://food-ecommerce-app.vercel.app/)
+Check out the live demo deployed on Vercel: [Fruits Ecommerce App(SVSK Online Store)](https://food-ecommerce-app.vercel.app/)
 
 ## Table of Contents
 

@@ -78,7 +78,7 @@ const ItemCheckout = () => {
                     <p className="text-sm truncate">{item.description}</p>
                     <div className="flex items-center justify-between">
                       <p className="text-2xl font-semibold">
-                        $ <span>{item.price}</span>
+                        ₹ <span>{item.price}</span>
                       </p>
                       <Select
                         options={quantityOption}
@@ -127,7 +127,7 @@ const ItemCheckout = () => {
                   <div className="flex items-center justify-between my-2">
                     <p className="text-lg font-semibold">Total</p>
                     <p className="text-lg font-semibold">
-                      $ {parseFloat(item.price) * qty.value}
+                      ₹ {parseFloat(item.price) * qty.value}
                     </p>
                   </div>
                 </div>

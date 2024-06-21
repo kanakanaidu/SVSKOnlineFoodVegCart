@@ -24,8 +24,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     firstName: currentUser?.displayName?.split(" ")[0] || "Nichole L",
     lastName: currentUser?.displayName?.split(" ")[1] || "Ritchie",
     address:
-      "Street: 2589 Cambridge Court City, State, Zip: Rogers, Arkansas(AR), 72756",
-    phone: currentUser?.phoneNumber || "479-531-8911",
+      "Street: Karnashree Layout, State: Karnataka, Zip: 560049",
+    phone: currentUser?.phoneNumber || "+91-9900519199",
     email: currentUser?.email || "cielo1981@gmail.com",
   };
 
@@ -52,20 +52,21 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       onSubmit={handleSubmit(onSubmitHandler)}
       className="sticky top-32 left-0"
     >
-      <CardDeatils
+      {/* removed card details as not required currently */}
+      {/* <CardDeatils
         control={control}
         errors={errors}
         defaultValues={defaultCardDetails}
-      />
+      /> */}
       <ShippingDetails control={control} errors={errors} />
       <Button
         scale={0.98}
         className="w-full mt-6 font-semibold justify-around text-lg"
         disabled={isSubmitting}
       >
-        <span>$ {totalPrice}</span>
+        <span>₹ {totalPrice}</span>
         <span className="flex gap-4 items-center">
-          Checkout <BsArrowRight size={24} />
+          Send Order <BsArrowRight size={24} />
         </span>
       </Button>
     </form>

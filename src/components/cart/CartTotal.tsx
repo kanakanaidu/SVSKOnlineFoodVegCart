@@ -33,7 +33,7 @@ const CartTotal: React.FC<CartTotalProps> = ({
           Price (<span>{numOfCartItems}</span> item)
         </p>
         <p>
-          $ <span>{totalPrice}</span>
+          ₹ <span>{totalPrice}</span>
         </p>
       </div>
       <div className="my-1 flex items-center justify-between border-b  border-primary text-sm">
@@ -42,7 +42,7 @@ const CartTotal: React.FC<CartTotalProps> = ({
       </div>
       <div className="flex items-center justify-between my-2">
         <p className="text-lg font-semibold">Total</p>
-        <p className="text-lg font-semibold">$ {totalPrice}</p>
+        <p className="text-lg font-semibold">₹ {totalPrice}</p>
       </div>
       {!removeProceedBtn && (
         <Button onClick={() => navigate("/checkout")} className="w-full">

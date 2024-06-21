@@ -62,22 +62,22 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                         {item.qty} x{" "}
                         <span className="capitalize">{item.title}</span>
                       </span>
-                      <span className="font-semibold">$ {item.price}</span>
+                      <span className="font-semibold">₹ {item.price}</span>
                     </div>
                   );
                 })}
 
                 <div className="flex items-center justify-between mt-4">
                   <span>Delivery</span>
-                  <span className="font-semibold">$ 0.0</span>
+                  <span className="font-semibold">₹ 0.0</span>
                 </div>
                 <div className="flex items-center justify-between ">
                   <span>Tax</span>
-                  <span className="font-semibold">$ 0.0</span>
+                  <span className="font-semibold">₹ 0.0</span>
                 </div>
                 <div className="flex items-center justify-between mt-5 pt-2 border-t border-white">
                   <span>Total</span>
-                  <span className="font-semibold">$ {totalPrice}</span>
+                  <span className="font-semibold">₹ {totalPrice}</span>
                 </div>
               </div>
 

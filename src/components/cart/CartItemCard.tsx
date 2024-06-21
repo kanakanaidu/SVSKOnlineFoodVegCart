@@ -41,7 +41,7 @@ const CartItemCard = ({ cartItem, removeBuyNowBtn = false }: CartItemProps) => {
           </span>
           <p className="text-sm truncate">{cartItem.description}</p>
           <p>
-            $ <span>{cartItem.price}</span>
+            ₹ <span>{cartItem.price}</span>
           </p>
         </div>
       </div>
