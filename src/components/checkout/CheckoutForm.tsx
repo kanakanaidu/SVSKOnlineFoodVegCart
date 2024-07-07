@@ -1,6 +1,6 @@
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import ShippingDetails from "./ShippingDetails";
-import CardDeatils from "./CardDeatils";
+// import CardDeatils from "./CardDeatils";
 import Button from "../reusables/Button";
 import { BsArrowRight } from "react-icons/bs";
 import { useForm } from "react-hook-form";

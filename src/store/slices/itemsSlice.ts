@@ -6,13 +6,13 @@ export interface Item {
   calories: string;
   category: string;
   description:
-    | "curry"
+    | "fashion"
     | "rice"
     | "fruits"
     | "vegetables"
-    | "snaks"
+    | "mobile accessories"
     | "icecreams"
-    | "fish"
+    | "meet"
     | "drinks"
     | "others";
   id: string;

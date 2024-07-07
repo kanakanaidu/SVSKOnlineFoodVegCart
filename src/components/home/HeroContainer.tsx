@@ -72,7 +72,12 @@ const HeroContainer = () => {
           alt="Hero Background"
         />
         <div className="w-full md:w-[90%] xl:w-3/4 h-full relative z-10 py-12 grid grid-cols-2 gap-y-14 gap-x-4 sm:gap-x-10 px-4 sm:px-10 md:px-0">
-          {heroData.map((item) => {
+        {/* <img
+          className="w-full h-auto max-h-[550px] md:w-3/4 md:h-full absolute top-0 right-0"
+          src="/images/logo2.png"
+          alt="Hero Background"
+        /> */}
+          {/* {heroData.map((item) => {
             return (
               <div
                 key={item.id}
@@ -89,7 +94,7 @@ const HeroContainer = () => {
                 </p>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     </div>

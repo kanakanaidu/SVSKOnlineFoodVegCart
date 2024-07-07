@@ -1,14 +1,18 @@
 import { OrderSummaryData } from "../pages/CheckoutPage";
 import Payment from "payment";
-import { useRef } from "react";
+import { SyntheticEvent, useRef } from "react";
+import Button from "./reusables/Button";
+import { useNavigate } from "react-router-dom";
 
 type OrderSummaryProps = {
+  // SendMessage: (event: SyntheticEvent) => void;
   data: OrderSummaryData;
 };
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
   data: { items, formData, totalPrice },
 }) => {
+  const navigate = useNavigate();
   const issuer = Payment.fns.cardType(formData.number);
   const recipt = useRef<HTMLDivElement>(null);
 
@@ -121,6 +125,15 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 </tr>
               </table>
             </div>
+            <Button color="rgb(234 87 101)" variant="outline"
+              scale={0.98}
+              className="w-full mt-6 font-semibold justify-around text-lg"
+              onClick={() => navigate("/")}
+            >
+              <span className="flex gap-4 items-center">
+                Submit Order
+              </span>
+            </Button>
           </div>
         </div>
       </div>

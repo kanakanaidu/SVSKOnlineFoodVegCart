@@ -16,7 +16,7 @@ const MenuContainer = () => {
   return (
     <section className="my-6 container-padding" id="menu">
       <h2 className="relative inline text-2xl font-semibold text-headingColor">
-        Hot Dishes
+        Fresh Catalog
         <span className="absolute -bottom-1 left-0 w-1/2 h-[2px] bg-primary" />
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-4 my-8">

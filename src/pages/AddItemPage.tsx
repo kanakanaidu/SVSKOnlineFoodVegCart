@@ -16,12 +16,12 @@ import { saveItem } from "../utils/firebaseFunctions";
 
 export const categories = [
   "fruits",
-  "curry",
+  "fashion",
   "rice",
   "vegetables",
-  "snaks",
+  "mobile accessories",
   "icecreams",
-  "fish",
+  "meet",
   "drinks",
   "others",
 ] as const;

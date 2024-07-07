@@ -118,12 +118,12 @@ const Header = () => {
 
         <Link to="/" className="flex items-center gap-2">
           <img
-            src="/images/logo.png"
+            src="/images/logo2.png"
             className="w-7 md:w-10 object-cover"
             alt="Logo Image"
           />
           <p className="hidden sm:flex text-headingColor text-xl font-bold">
-            SVSK Online Store
+            Lepakshi Online Kirana Store
           </p>
         </Link>
         <Search className="max-md:hidden" />
@@ -212,7 +212,7 @@ const Header = () => {
                         <p>Account</p>
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </div>
-                      {user.email === "nj7055233@gmail.com" && (
+                      {user.email === "nj7055233@gmail.com" || user.email === "tkn123.mca@gmail.com" && (
                         <Link
                           to="/addItem"
                           className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
