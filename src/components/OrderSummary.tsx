@@ -1,8 +1,11 @@
 import { OrderSummaryData } from "../pages/CheckoutPage";
 import Payment from "payment";
-import { SyntheticEvent, useRef } from "react";
+import { useRef, useState } from "react";
+import html2canvas from 'html2canvas';
 import Button from "./reusables/Button";
 import { useNavigate } from "react-router-dom";
+import sendWhatsApp from "../utils/sendMessage";
+import uploadImage from "../utils/uploadImage";
 
 type OrderSummaryProps = {
   // SendMessage: (event: SyntheticEvent) => void;
@@ -15,15 +18,50 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const navigate = useNavigate();
   const issuer = Payment.fns.cardType(formData.number);
   const recipt = useRef<HTMLDivElement>(null);
+  const [to, setTo] = useState('');
+  const [message, setMessage] = useState('');
+  const captureRef = useRef<HTMLDivElement>(null);
 
+  const captureScreenshot = async () => {
+    if (captureRef.current) {
+      const canvas = await html2canvas(captureRef.current); // Adjust scale to reduce size
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // Upload the screenshot to an image hosting service
+      // const imageUrl = await uploadImage(imgData);
+      const imageUrl = await uploadImage(imgData);
+      // downloadImage(imgData, "invoice");
+      // Send the screenshot via WhatsApp
+      // sendWhatsAppMessage(imgData);
+      await sendWhatsApp(formData.phone, "Please find the invoice copy for your order...", imageUrl);
+    }
+  };
+
+  const downloadImage = (blob: string, fileName: string) => {
+    const fakeLink = window.document.createElement("a");
+    // fakeLink.style = "display:none;";
+    fakeLink.download = fileName;
+
+    fakeLink.href = blob;
+
+    document.body.appendChild(fakeLink);
+    fakeLink.click();
+    document.body.removeChild(fakeLink);
+
+    fakeLink.remove();
+  };
+
+  // added this function to take screenshot before unloading the page.
+  async function sleep(ms: number): Promise<void> {
+    return new Promise(
+      (resolve) => setTimeout(resolve, ms));
+  }
   return (
     <div className="fixed top-0 bottom-0 left-0 overflow-auto w-screen z-[50] bg-gray-200">
       <div
-        ref={recipt}
         className="w-full p-4 sm:p-10 flex flex-col items-center justify-center"
       >
-        <div
-          id="toPdf"
+        <div id="toPdf"
           className="w-[min(100%,720px)] min-h-screen flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden"
         >
           <div className="h-auto w-full md:w-[40%] py-3 px-1 bg-white flex items-center ">
@@ -52,7 +90,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </div>
           </div>
 
-          <div className="h-auto flex-1 bg-primary p-4 text-white flex flex-col items-center ">
+          <div ref={captureRef}
+          className="h-auto flex-1 bg-primary p-4 text-white flex flex-col items-center ">
             <span className="text-3xl sm:text-4xl font-semibold underline underline-offset-4">
               Order Summary
             </span>
@@ -128,7 +167,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <Button color="rgb(234 87 101)" variant="outline"
               scale={0.98}
               className="w-full mt-6 font-semibold justify-around text-lg"
-              onClick={() => navigate("/")}
+              onClick={async () => {
+                // await sendWhatsApp(to, message);
+                // await sendWhatsApp(formData.phone, "this message from react project...");
+                captureScreenshot();
+                navigate("/")
+              }}
             >
               <span className="flex gap-4 items-center">
                 Submit Order

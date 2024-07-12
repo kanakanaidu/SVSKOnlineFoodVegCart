@@ -118,7 +118,7 @@ const Header = () => {
 
         <Link to="/" className="flex items-center gap-2">
           <img
-            src="/images/logo2.png"
+            src="/images/kirana1.jpg"
             className="w-7 md:w-10 object-cover"
             alt="Logo Image"
           />
