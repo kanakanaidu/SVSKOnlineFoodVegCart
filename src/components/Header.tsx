@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsBag } from "react-icons/bs";
 import { BiMenuAltLeft, BiSolidUserCircle } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup, getAuth, GoogleAuthProvider } from "firebase/auth";
-import { app } from "../../firebase.config.ts";
+import { signInWithPopup, getAuth, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { app, auth } from "../../firebase.config.ts";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../store/slices/userSlice.ts";
 import { RootState } from "../store/store.ts";
-import { TbLogout } from "react-icons/tb";
+import { TbLogout, TbMenuOrder, TbShoppingBag, TbShoppingCart } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { toggleIsCartOpen } from "../store/slices/cartSlice.ts";
 import { NavHashLink } from "react-router-hash-link";
@@ -16,6 +16,7 @@ import Button from "./reusables/Button.tsx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Search from "./Search.tsx";
 import { BsSearch } from "react-icons/bs";
+import { getUserRole, setUserRole } from "../utils/userService.ts";
 
 const firebaseAuth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -48,6 +49,32 @@ const Header = () => {
   const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [loginType, setLoginType] = useState<string>('');
+
+  // const openModal = () => setModalIsOpen(true);
+  // const closeModal = () => setModalIsOpen(false);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (user?.uid) {
+        const userRole = await getUserRole(user.uid);
+        setRole(userRole);
+      }
+      setLoading(false);
+    };
+
+    fetchUserRole();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const login = async () => {
     try {
@@ -56,6 +83,7 @@ const Header = () => {
       } = await signInWithPopup(firebaseAuth, provider);
       console.log(refreshToken, providerData[0]);
       dispatch(setUser({ refreshToken, ...providerData[0] }));
+      await setUserRole(providerData[0]);
       localStorage.setItem(
         "user",
         JSON.stringify({ refreshToken, ...providerData[0] })
@@ -70,6 +98,17 @@ const Header = () => {
     localStorage.clear();
     dispatch(setUser(null));
   };
+
+  // const handleEmailPasswordLogin = async (loginType: string) => {
+  //   setRole(loginType);
+  //   console.log("LogingType: ", loginType);
+  //   try {
+  //     await signInWithEmailAndPassword(auth, email, password);
+  //     alert("Logged in successfully with email and password!");
+  //   } catch (error) {
+  //     console.error("Error logging in with email and password", error);
+  //   }
+  // };
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full bg-primaryBg/60 border-b-2 border-gray-400 backdrop-blur-md">
@@ -221,6 +260,33 @@ const Header = () => {
                           <IoMdAdd className="text-[1.35rem]" />
                         </Link>
                       )}
+                      {role == "admin" && (
+                        <Link
+                          to="/admin"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>Admin</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
+                      {role == "admin" && (
+                        <Link
+                          to="/adminForm"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>Admin Forms</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
+                      {role == "user" && (
+                        <Link
+                          to="/myOrders"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>My Orders</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
                       <div
                         onClick={logout}
                         className="cursor-pointer border-t rounded-b-lg border-gray-600 flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition"
@@ -233,13 +299,66 @@ const Header = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <motion.button
-                onClick={login}
-                whileTap={{ scale: 0.8 }}
-                className="bg-primary text-sm sm:text-base text-white w-full h-full rounded-full font-medium shadow-xl"
+              <div
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="relative w-full h-full"
               >
-                Login
-              </motion.button>
+                <motion.div
+                  className="cursor-pointer w-full h-full rounded-full flex items-center justify-around border-2 border-black  shadow-xl"
+                  whileTap={{ scale: 0.8 }}
+                >
+                  <BiMenuAltLeft className="text-xl sm:text-2xl" />
+                  <img
+                    className="w-5 sm:w-7 h-auto rounded-full object-cover"
+                    src={"/images/profile-image.png"}
+                    alt="Profile Image"
+                  />
+                  <motion.button
+                    // onClick={login}
+                    whileTap={{ scale: 0.8 }}
+                    className="bg-primary text-sm sm:text-base text-white w-full h-full rounded-full font-medium shadow-xl"
+                  >
+                    Login
+                  </motion.button>
+                </motion.div>
+                {/* Dropdown user menu */}
+                <AnimatePresence>
+                  {isUserMenuOpen && (
+                    <motion.div
+                      initial={{
+                        scale: 0.6,
+                        opacity: 0,
+                      }}
+                      animate={{
+                        scale: 1,
+                        opacity: 1,
+                      }}
+                      exit={{
+                        scale: 0.6,
+                        opacity: 0,
+                      }}
+                      className="absolute right-0 top-16 flex flex-col w-40 bg-primaryBg border-gray-600 border rounded-lg shadow-xl py-2 w-max	items-stretch"
+                    >
+                      <motion.button onClick={login}
+                        whileTap={{ scale: 0.8 }} className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                      >
+                        Login
+                        <BiSolidUserCircle className="text-[1.35rem]" />
+                      </motion.button>
+                      <div onClick={() => { setLoginType('retailer'); navigate("/partnerLogin") }}
+                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition">
+                        <p>Retailer Login</p>
+                        <BiSolidUserCircle className="text-[1.35rem]" />
+                      </div>
+                      <div onClick={() => { setLoginType('delivery'); navigate("/partnerLogin") }}
+                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition">
+                        <p>Delivery Boy Login</p>
+                        <BiSolidUserCircle className="text-[1.35rem]" />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
           </div>
         </div>

@@ -52,10 +52,10 @@ const HeroContainer = () => {
         <p className="text-5xl md:text-7xl xl:text-8xl font-bold tracking-wide text-headingColor">
           Get Your Products in <span className="text-primary">Minutes.</span>
         </p>
-        <p className="font-medium text-base xl:text-lg">
-          Welcome to SVSK Online Store, your one-stop online destination for all things
-          <span className="font-semibold"> fresh and delicious</span>! At
-          SVSK Online Store, we take pride in delivering the finest selection of fruits,
+        <p className="font-medium text-base xl:text-lg ">
+          Welcome to <b>Lepakshi Online Kirana Store</b>, your one-stop online destination for all things
+          <span className="font-semibold"> fresh and delicious</span>! <br/>
+          At <b>Lepakshi Online Kirana Store</b>, we take pride in delivering the finest selection of fruits,
           vegetables, meat, ice creams, and cold drinks right to your doorstep.
         </p>
 

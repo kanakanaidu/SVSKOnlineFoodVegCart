@@ -2,6 +2,9 @@ import Input from "../reusables/Input";
 import { Controller } from "react-hook-form";
 import { CheckoutFormSchema } from "../../utils/zodSchemas";
 import { Control, FieldErrors } from "react-hook-form";
+import MapPicker from "../reusables/MapPicker";
+import { useState } from "react";
+import useGeolocation from "../../utils/useGeolocation";
 
 type ShippingDetailsProps = {
   control: Control<CheckoutFormSchema, any>;
@@ -12,6 +15,10 @@ const ShippingDetails: React.FC<ShippingDetailsProps> = ({
   control,
   errors,
 }) => {
+  const { location: currentLocation, error } = useGeolocation();
+  // const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+  
   return (
     <div>
       <span className="text-lg uppercase font-semibold">Shipping Details</span>
@@ -69,7 +76,23 @@ const ShippingDetails: React.FC<ShippingDetailsProps> = ({
             </div>
           )}
         />
-
+        <h2>Select Your Location for Order Delivery</h2>
+        {selectedLocation && (
+          <div className="mt-4">
+            <label>
+              Selected Location: Latitude {selectedLocation.lat}, Longitude {selectedLocation.lng}
+            </label>
+          </div>
+        )}
+        {/* {locDefault && (
+          <div className="mt-4">
+            <label>
+              Default Location: Latitude {locDefault.lat}, Longitude {locDefault.lng}
+            </label>
+          </div>
+        )} */}
+        {error && <p className="text-red-500">{error}</p>}
+        <MapPicker onLocationSelect={setSelectedLocation} initialLocation={currentLocation} />
         <div className="grid grid-cols-2 gap-3">
           <Controller
             name="phone"

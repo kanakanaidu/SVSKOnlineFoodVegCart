@@ -10,7 +10,7 @@ const uploadImage = async (base64Image: string) => {
         try {
             imageUrl = await uploadImageToCloudinary(imageFile);
             console.log('Image uploaded successfully:', imageUrl);
-            alert('Screenshot sent via WhatsApp!');
+            // alert('Screenshot sent via WhatsApp!');
         } catch (error) {
             console.error('Failed to upload image or send WhatsApp message', error);
             alert('Failed to send screenshot via WhatsApp.');

@@ -21,12 +21,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   const currentUser = useSelector((state: RootState) => state.user.user);
 
   const defaultShipingDetails = {
-    firstName: currentUser?.displayName?.split(" ")[0] || "Nichole L",
-    lastName: currentUser?.displayName?.split(" ")[1] || "Ritchie",
+    firstName: currentUser?.displayName?.split(" ")[0] || "Hare",
+    lastName: currentUser?.displayName?.split(" ")[1] || "Krishna",
     address:
       "Street: Karnashree Layout, State: Karnataka, Zip: 560049",
     phone: currentUser?.phoneNumber || "+91-9900519199",
-    email: currentUser?.email || "cielo1981@gmail.com",
+    email: currentUser?.email || "hare.krishna@gmail.com",
   };
 
   const defaultCardDetails = {

@@ -1,12 +1,22 @@
 import axios from 'axios';
+import { fetchConfig } from './firebaseFunctions';
 
-const sendWhatsApp = async (phoneNumber: any, message: any, imageData: string) => {
+const sendWhatsApp = async (phoneNumber: any, message: any, imageData?: string) => {
     try {
+        let phone: string = '';
+        if(phoneNumber.startsWith('+91')){
+            phone = phoneNumber;
+        } else{
+            const last10Numbers = phoneNumber.slice(-10);
+            phone = '+91'+ last10Numbers;
+        }
         // const base64Image = imageData.split(',')[1]; // Get base64 image data
-        const apiEndpoint = 'http://localhost:3001/send-whatsapp'; // Replace with your API endpoint
+        // const apiEndpoint = 'http://ec2-13-201-99-56.ap-south-1.compute.amazonaws.com:3001/send-whatsapp'; // Replace with your API endpoint
+        const apiEndpoint = await fetchConfig();
+        // console.log(`endpoint: ${process.env.REACT_APP_API_ENDPOINT}`);
 
-        const response = await axios.post(apiEndpoint, {
-            to: phoneNumber,
+        const response = await axios.post(apiEndpoint+'/send-whatsapp', {
+            to: phone,
             message: message,
             // media: base64Image
             media: imageData

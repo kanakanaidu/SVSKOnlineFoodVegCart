@@ -25,7 +25,7 @@ const AboutContainer = () => {
               <span className="absolute bottom-0 right-0 w-3/4 h-[2px] bg-textColor"></span>
             </p>
             <p className="text-xxs sm:text-xs md:text-base">
-              At <span className="font-semibold">SVSK Online Store</span>, we're not
+              At <span className="font-semibold">Lepakshi Online Kirana Store</span>, we're not
               just passionate about food; we're passionate about delivering the
               highest quality, freshest, and most delicious products to your
               table. Our journey began with a simple goal - to provide families
@@ -40,7 +40,7 @@ const AboutContainer = () => {
               <span className="absolute bottom-0 right-0 w-3/4 h-[2px] bg-textColor"></span>
             </p>
             <p className="text-xxs sm:text-xs md:text-base mt-2">
-              Founded in 2023, our roots run deep in the fertile soils of India.
+              Founded in 2024, our roots run deep in the fertile soils of India.
               We believe in sustainable farming practices that nurture the land
               and promote biodiversity. Our commitment to ethical sourcing and
               local partnerships ensures that you receive the very best nature

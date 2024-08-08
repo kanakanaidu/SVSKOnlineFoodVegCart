@@ -10,6 +10,10 @@ import {
 import { firestore } from "../../firebase.config";
 import { Item } from "../store/slices/itemsSlice";
 
+interface Config {
+  apiEndpoint: string;
+}
+
 export const saveItem = async (data: any) => {
   await setDoc(doc(firestore, "foodItems", crypto.randomUUID()), data, {
     merge: true,
@@ -61,4 +65,15 @@ export const searchItemWithTitle = async (title: string) => {
   });
 
   return searchedItems;
+};
+
+export const fetchConfig = async (): Promise<Config> => {
+  const docRef = doc(firestore, "config", "REACT_APP_API_ENDPOINT");
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data() as Config;
+  } else {
+    throw new Error("No such document!");
+  }
 };
