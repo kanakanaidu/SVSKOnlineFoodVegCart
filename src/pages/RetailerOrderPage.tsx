@@ -28,7 +28,7 @@ const RetailerOrderPage: React.FC = () => {
         fetchOrders();
     }, [retailerId]);
 
-    const handleStatusChange = async (orderId: string, status: string) => {
+    const handleStatusChange = async (orderId: any, status: string) => {
         try {
             await updateOrderStatus(orderId, status);
             setOrders((prevOrders) =>

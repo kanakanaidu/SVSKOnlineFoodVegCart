@@ -1,7 +1,8 @@
 import Button from "../reusables/Button";
 import { NavHashLink } from "react-router-hash-link";
 
-const heroData = [
+  // @ts-ignore
+  const heroData = [
   {
     id: 1,
     imageUrl: "/images/hero/ice-creames.png",

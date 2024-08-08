@@ -28,15 +28,22 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const issuer = Payment.fns.cardType(formData.number);
   const captureRef = useRef<HTMLDivElement>(null);
 
+  // @ts-ignore
   const [customerName, setCustomerName] = useState("");
+  // @ts-ignore
   const [address, setAddress] = useState("");
   const [orders, setOrders] = useState<OrderItem[]>([]);
+  // @ts-ignore
   const [itemName, setItemName] = useState("");
+  // @ts-ignore
   const [quantity, setQuantity] = useState("1");
+  // @ts-ignore
   const [price, setPrice] = useState("0");
   const [status, setStatus] = useState<Order["status"]>("pending");
+  // @ts-ignore
   const [ordLocation, setOrdLocation] = useState<Location[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // @ts-ignore
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const SubmitOrder = async () => {
@@ -109,6 +116,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     }
   };
 
+  // @ts-ignore
   const downloadImage = (blob: string, fileName: string) => {
     const fakeLink = window.document.createElement("a");
     // fakeLink.style = "display:none;";
@@ -123,6 +131,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     fakeLink.remove();
   };
 
+  // @ts-ignore
   // added this function to take screenshot before unloading the page.
   async function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));

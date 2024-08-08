@@ -3,12 +3,12 @@ import { BsBag } from "react-icons/bs";
 import { BiMenuAltLeft, BiSolidUserCircle } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup, getAuth, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
-import { app, auth } from "../../firebase.config.ts";
+import { signInWithPopup, getAuth, GoogleAuthProvider } from "firebase/auth";
+import { app } from "../../firebase.config.ts";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../store/slices/userSlice.ts";
 import { RootState } from "../store/store.ts";
-import { TbLogout, TbMenuOrder, TbShoppingBag, TbShoppingCart } from "react-icons/tb";
+import { TbLogout, TbShoppingCart } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { toggleIsCartOpen } from "../store/slices/cartSlice.ts";
 import { NavHashLink } from "react-router-hash-link";
@@ -51,10 +51,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  // @ts-ignore
   const [loginType, setLoginType] = useState<string>('');
 
   // const openModal = () => setModalIsOpen(true);

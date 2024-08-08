@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100%',
@@ -41,6 +41,7 @@ const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialLocation
     }
   };
 
+  // @ts-ignore
   const handlePlaceChanged = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();

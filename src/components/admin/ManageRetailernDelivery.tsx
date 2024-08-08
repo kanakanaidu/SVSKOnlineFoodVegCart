@@ -29,6 +29,7 @@ interface DeliveryBoy {
 }
 
 const AdminForm: React.FC = () => {
+    // @ts-ignore
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [retailers, setRetailers] = useState<Retailer[]>([]);
   const [deliveryBoys, setDeliveryBoys] = useState<DeliveryBoy[]>([]);
@@ -40,8 +41,8 @@ const AdminForm: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedRetailers = await getRetailers();
-      const fetchedDeliveryBoys = await getDeliveryBoys();
+      const fetchedRetailers: any = await getRetailers();
+      const fetchedDeliveryBoys: any = await getDeliveryBoys();
       setRetailers(fetchedRetailers);
       setDeliveryBoys(fetchedDeliveryBoys);
     };

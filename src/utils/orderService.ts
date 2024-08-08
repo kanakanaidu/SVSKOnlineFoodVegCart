@@ -1,7 +1,6 @@
-import { collection, addDoc, getDocs, DocumentReference, DocumentData, doc, updateDoc, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, query, where } from 'firebase/firestore';
 import { firestore } from '../../firebase.config';
 import { Order } from '../store/types';
-import { CartItem } from '../store/slices/cartSlice';
 
 export const addOrder = async (order: Order) => {
   try {
@@ -30,7 +29,7 @@ export const getOrdersForUser = async (uEmail: string) => {
       orderItems: orderData.orderItems,
       orderValue: orderData.orderValue,
       status: orderData.status,
-      location: ''
+      location: orderData.location
     });
 
   }

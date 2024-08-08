@@ -1,5 +1,5 @@
 {
-  "name": "food-ecommerce-app",
+  "name": "svsk-online-cart",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "firebase": "^10.0.0",
     "framer-motion": "^10.12.22",
     "html2canvas": "^1.4.1",

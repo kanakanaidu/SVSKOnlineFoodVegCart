@@ -11,9 +11,9 @@ const OrderProcessing: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedOrders = await getOrders();
-      const fetchedRetailers = await getRetailers();
-      const fetchedDeliveryBoys = await getDeliveryBoys();
+      const fetchedOrders: any = await getOrders();
+      const fetchedRetailers: any = await getRetailers();
+      const fetchedDeliveryBoys: any = await getDeliveryBoys();
       setOrders(fetchedOrders);
       setRetailers(fetchedRetailers);
       setDeliveryBoys(fetchedDeliveryBoys);
@@ -34,7 +34,7 @@ const OrderProcessing: React.FC = () => {
     return R * c; // Distance in km
   };
 
-  const getNearestEntities = (orderLocation: string, entities: (Retailer | DeliveryBoy)[]) => {
+  const getNearestEntities = (orderLocation: any, entities: (Retailer | DeliveryBoy)[]) => {
     // const [orderLat, orderLon] = orderLocation.split(',').map(Number);
     // const [orderLat, orderLon] = orderLocation ? JSON.parse(orderLocation) : null;
     const ordLoc = JSON.stringify(orderLocation);
@@ -50,7 +50,7 @@ const OrderProcessing: React.FC = () => {
       .sort((a, b) => a.distance - b.distance);
   };
 
-  const handleAssign = async (orderId: string, retailerId: string, deliveryBoyId: string, fbUpdate: boolean) => {
+  const handleAssign = async (orderId: any, retailerId: string, deliveryBoyId: string, fbUpdate: boolean) => {
     try {
       setOrders(orders.map(order => order.id === orderId ? { ...order, retailerId, deliveryBoyId } : order));
       if (fbUpdate) {

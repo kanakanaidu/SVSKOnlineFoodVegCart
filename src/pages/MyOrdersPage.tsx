@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cancelOrder, getOrders, getOrdersForUser } from "../utils/orderService";
+import { cancelOrder, getOrdersForUser } from "../utils/orderService";
 import { Order } from "../store/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -61,7 +61,7 @@ const OrderList: React.FC = () => {
             }
         }
     };
-    const openModal = (orderId: string) => {
+    const openModal = (orderId: any) => {
         setSelectedOrderId(orderId);
         setShowModal(true);
     };

@@ -1,6 +1,6 @@
 // RetailerRegistration.tsx
 import React, { useState } from "react";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebase.config";
 import useGeolocation from "../utils/useGeolocation";
 import MapPicker from "../components/reusables/MapPicker";

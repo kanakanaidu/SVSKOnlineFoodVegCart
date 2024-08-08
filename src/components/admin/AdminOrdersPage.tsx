@@ -42,7 +42,7 @@ const OrderList: React.FC = () => {
             }
         }
     };
-    const openModal = (orderId: string) => {
+    const openModal = (orderId: any) => {
         setSelectedOrderId(orderId);
         setShowModal(true);
     };

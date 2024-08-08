@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebase.config";
 import useGeolocation from "../utils/useGeolocation";
 import MapPicker from "../components/reusables/MapPicker";
@@ -13,7 +13,7 @@ const DeliveryBoyRegistration: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const { location: currentLocation, error } = useGeolocation();
+  const { location: currentLocation } = useGeolocation();
   const [selectedLocation, setSelectedLocation] = useState<{
     lat: number;
     lng: number;

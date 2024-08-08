@@ -36,7 +36,7 @@ const AdminApprovalPage: React.FC = () => {
     fetchRetailers();
   }, []);
 
-  const handleApproval = async (id: string, status: string) => {
+  const handleApproval = async (id: any, status: string) => {
     const retailerRef = doc(firestore, "retailers", id);
     await updateDoc(retailerRef, { status });
     setRetailers((prevRetailers) =>
@@ -57,7 +57,7 @@ const AdminApprovalPage: React.FC = () => {
     }
   };
 
-  const openModal = (retailerId: string) => {
+  const openModal = (retailerId: any) => {
     setSelectedRetailerId(retailerId);
     handleRejection();
     setShowModal(true);
@@ -69,7 +69,7 @@ const AdminApprovalPage: React.FC = () => {
     setRejectReason('');
   };
 
-  const handleApprovalDB = async (id: string, status: string) => {
+  const handleApprovalDB = async (id: any, status: string) => {
     const dBoyRef = doc(firestore, "deliveryBoys", id);
     await updateDoc(dBoyRef, { status });
     setDeliveryBoys((prevDeliveryBoys) =>
@@ -90,7 +90,7 @@ const AdminApprovalPage: React.FC = () => {
     }
   };
 
-  const openModalDB = (dBoyId: string) => {
+  const openModalDB = (dBoyId: any ) => {
     setSelectedDBId(dBoyId);
     handleRejectionDB();
     setShowModalDB(true);
@@ -115,7 +115,7 @@ const AdminApprovalPage: React.FC = () => {
             <th className="py-2">Email</th>
             <th className="py-2">Phone</th>
             <th className="py-2">Address</th>
-            <th className="py-2">Location</th>
+            {/* <th className="py-2">Location</th> */}
             <th className="py-2">Actions</th>
           </tr>
         </thead>
@@ -127,7 +127,7 @@ const AdminApprovalPage: React.FC = () => {
               <td className="py-2">{retailer.email}</td>
               <td className="py-2">{retailer.phoneNumber}</td>
               <td className="py-2">{retailer.address}</td>
-              <td className="py-2">{retailer.location?.lat},{retailer.location?.lng}</td>
+              {/* <td className="py-2">{retailer.location?.lat},{retailer.location?.lng}</td> */}
               <td className="py-2">
                 <button
                   onClick={() => handleApproval(retailer.id, "approved")}
@@ -178,7 +178,7 @@ const AdminApprovalPage: React.FC = () => {
               <th className="py-2">Email</th>
               <th className="py-2">Phone</th>
               <th className="py-2">Address</th>
-              <th className="py-2">Location</th>
+              {/* <th className="py-2">Location</th> */}
               <th className="py-2">Actions</th>
             </tr>
           </thead>
@@ -190,7 +190,7 @@ const AdminApprovalPage: React.FC = () => {
                 <td className="py-2">{dBoy.email}</td>
                 <td className="py-2">{dBoy.phoneNumber}</td>
                 <td className="py-2">{dBoy.address}</td>
-                <td className="py-2">{dBoy.location?.lat},{dBoy.location?.lng}</td>
+                {/* <td className="py-2">{dBoy.location?.lat},{dBoy.location?.lng}</td> */}
                 <td className="py-2">
                   <button
                     onClick={() => handleApprovalDB(dBoy.id, "approved")}
