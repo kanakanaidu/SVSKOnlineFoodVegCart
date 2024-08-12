@@ -55,58 +55,63 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         const canvas = await html2canvas(captureRef.current); // Adjust scale to reduce size
         const imgData = canvas.toDataURL("image/png", 1.0);
         const currUser = fetchUser();
-        // Upload the screenshot to an image hosting service
-        // const imageUrl = await uploadImage(imgData);
-        const imageUrl = await uploadImage(imgData);
-        // downloadImage(imgData, "invoice");
+        if (!currUser) {
+          toast.warning("You need to be logged in to submit the order.😉");
+        } else {
+          // Upload the screenshot to an image hosting service
+          // const imageUrl = await uploadImage(imgData);
+          const imageUrl = await uploadImage(imgData);
+          // downloadImage(imgData, "invoice");
 
-        for (let index = 0; index < items.length; index++) {
-          const element = items[index];
-          const newItem: OrderItem = {
-            itemName: element.title,
-            quantity: element.qty,
-            price: element.price,
+          for (let index = 0; index < items.length; index++) {
+            const element = items[index];
+            const newItem: OrderItem = {
+              itemName: element.title,
+              quantity: element.qty,
+              price: element.price,
+            };
+            // setItemName(element.description);
+            // setQuantity(element.qty);
+            // setPrice(element.price);
+            setOrders([...orders, newItem]);
+          }
+
+          if (currUser?.displayName) {
+            setCustomerName(currUser.displayName);
+          }
+          if (formData.address) {
+            setAddress(formData.address);
+          }
+          const custLocation: Location = fetchLocation();
+
+          const newOrder: Order = {
+            customerName: currUser?.displayName ? currUser.displayName : "",
+            customerEmail: currUser?.email ? currUser.email : "",
+            address: formData.address,
+            orderItems: items,
+            orderValue: totalPrice.toString(),
+            status: status,
+            location: custLocation,
           };
-          // setItemName(element.description);
-          // setQuantity(element.qty);
-          // setPrice(element.price);
-          setOrders([...orders, newItem]);
-        }
 
-        if (currUser?.displayName) {
-          setCustomerName(currUser.displayName);
+          const orderId = await addOrder(newOrder);
+          setCustomerName("");
+          setAddress("");
+          setOrders([]);
+          setStatus("pending");
+          // clearCart();
+          // Send the screenshot via WhatsApp
+          await sendWhatsApp(
+            formData.phone,
+            "Please find the invoice copy for your order...",
+            imageUrl
+          );
+          dispatch(clearCart());
+          toast.success(
+            `Order submitted successfully, your order ID: ${orderId} 😍`
+          );
+          setIsSubmitted(true);
         }
-        if (formData.address) {
-          setAddress(formData.address);
-        }
-        const custLocation: Location = fetchLocation();
-
-        const newOrder: Order = {
-          customerName: currUser?.displayName ? currUser.displayName : "",
-          customerEmail: currUser?.email ? currUser.email : "",
-          address: formData.address,
-          orderItems: items,
-          orderValue: totalPrice.toString(),
-          status: status,
-          location: custLocation,
-        };
-
-        const orderId = await addOrder(newOrder);
-        setCustomerName("");
-        setAddress("");
-        setOrders([]);
-        setStatus("pending");
-        // clearCart();
-        // Send the screenshot via WhatsApp
-        await sendWhatsApp(
-          formData.phone,
-          "Please find the invoice copy for your order...",
-          imageUrl
-        );
-        toast.success(
-          `Order submitted successfully, your order ID: ${orderId} 😍`
-        );
-        setIsSubmitted(true);
       }
     } catch (error) {
       console.error("Order submission failed:", error);
@@ -258,7 +263,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                   // await sendWhatsApp(to, message);
                   // await sendWhatsApp(formData.phone, "this message from react project...");
                   SubmitOrder();
-                  dispatch(clearCart());
                   navigate("/");
                 }}
               >
