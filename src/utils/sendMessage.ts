@@ -15,7 +15,7 @@ const sendWhatsApp = async (phoneNumber: any, message: any, imageData?: string) 
         // const apiEndpoint = await fetchConfig();
         // console.log(`endpoint: ${process.env.REACT_APP_API_ENDPOINT}`);
 
-        const response = await axios.post(apiEndpoint+'/send-whatsapp', {
+        const response = await axios.post(`${apiEndpoint}/send-whatsapp`, {
             to: phone,
             message: message,
             // media: base64Image
