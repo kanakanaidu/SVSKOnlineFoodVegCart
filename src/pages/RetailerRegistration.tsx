@@ -13,6 +13,7 @@ const RetailerRegistration: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [identity, setIdentity] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const { location: currentLocation } = useGeolocation();
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -38,9 +39,10 @@ const RetailerRegistration: React.FC = () => {
         name,
         email,
         phoneNumber: phone,
+        identity,
         address,
         location: selectedLocation,
-        status: "pending",
+        status: "approved",
         password,
       });
       // await addDoc(collection(firestore, "retailers", user.uid), {
@@ -63,6 +65,7 @@ const RetailerRegistration: React.FC = () => {
       setName("");
       setEmail("");
       setPhone("");
+      setIdentity("");
       setAddress("");
       setSelectedLocation(null);
     } catch (error) {
@@ -115,6 +118,18 @@ const RetailerRegistration: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
+            Aadhar:{" "}
+          </label>
+          <input
+            type="Aadhar"
+            value={identity}
+            onChange={(e) => setIdentity(e.target.value)}
+            required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
             Address:{" "}
           </label>
           <input
@@ -135,7 +150,7 @@ const RetailerRegistration: React.FC = () => {
           />
         </div>
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Register
+          Retailer Register
         </button>
       </form>
     </div>

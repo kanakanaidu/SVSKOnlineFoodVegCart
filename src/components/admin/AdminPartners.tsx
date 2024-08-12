@@ -3,7 +3,7 @@ import { DeliveryBoy, Retailer } from "../../store/types";
 import { firestore } from "../../../firebase.config";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 
-const AdminApprovalPage: React.FC = () => {
+const AdminPartners: React.FC = () => {
   const [retailers, setRetailers] = useState<Retailer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -18,7 +18,7 @@ const AdminApprovalPage: React.FC = () => {
       const querySnapshot = await getDocs(collection(firestore, "retailers"));
       const pendingRetailers = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() } as Retailer))
-        .filter((retailer) => retailer.status === "pending");
+        .filter((retailer) => retailer.status === "approved");
       setRetailers(pendingRetailers);
       setLoading(false);
     };
@@ -27,7 +27,7 @@ const AdminApprovalPage: React.FC = () => {
       const querySnapshot = await getDocs(collection(firestore, "deliveryBoys"));
       const pendingDeliveryBoys = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() } as DeliveryBoy))
-        .filter((dBoy) => dBoy.status === "pending");
+        .filter((dBoy) => dBoy.status === "approved");
       setDeliveryBoys(pendingDeliveryBoys);
       setLoading(false);
     };
@@ -47,7 +47,7 @@ const AdminApprovalPage: React.FC = () => {
   const handleRejection = async () => {
     if (selectedRetailerId && rejectReason.trim()) {
       const retailerRef = doc(firestore, "retailers", selectedRetailerId);
-      await updateDoc(retailerRef, { status: "rejected", remarks: rejectReason });
+      await updateDoc(retailerRef, { status: "blocked", remarks: rejectReason });
       setRetailers((prevRetailers) =>
         prevRetailers.filter((retailer) => retailer.id !== selectedRetailerId)
       );
@@ -80,7 +80,7 @@ const AdminApprovalPage: React.FC = () => {
   const handleRejectionDB = async () => {
     if (selectedDBId && rejectReason.trim()) {
       const dBoyRef = doc(firestore, "deliveryBoys", selectedDBId);
-      await updateDoc(dBoyRef, { status: "rejected", remarks: rejectReason });
+      await updateDoc(dBoyRef, { status: "blocked", remarks: rejectReason });
       setDeliveryBoys((prevDeliveryBoys) =>
         prevDeliveryBoys.filter((dBoy) => dBoy.id !== selectedDBId)
       );
@@ -114,8 +114,8 @@ const AdminApprovalPage: React.FC = () => {
             <th className="py-2">Name</th>
             <th className="py-2">Email</th>
             <th className="py-2">Phone</th>
+            <th className="py-2">Aadhar</th>
             <th className="py-2">Address</th>
-            {/* <th className="py-2">Location</th> */}
             <th className="py-2">Actions</th>
           </tr>
         </thead>
@@ -126,20 +126,20 @@ const AdminApprovalPage: React.FC = () => {
               <td className="py-2">{retailer.name}</td>
               <td className="py-2">{retailer.email}</td>
               <td className="py-2">{retailer.phoneNumber}</td>
+              <td className="py-2">{retailer.identity}</td>
               <td className="py-2">{retailer.address}</td>
-              {/* <td className="py-2">{retailer.location?.lat},{retailer.location?.lng}</td> */}
               <td className="py-2">
                 <button
-                  onClick={() => handleApproval(retailer.id, "approved")}
+                  onClick={() => handleApproval(retailer.id, "reactivated")}
                   className="bg-green-500 text-white p-2 rounded mr-2"
                 >
-                  Approve
+                  Reactivate
                 </button>
                 <button
                   onClick={() => openModal(retailer.id)}
                   className="bg-red-500 text-white p-2 rounded"
                 >
-                  Reject
+                  Block
                 </button>
               </td>
             </tr>
@@ -177,8 +177,8 @@ const AdminApprovalPage: React.FC = () => {
               <th className="py-2">Name</th>
               <th className="py-2">Email</th>
               <th className="py-2">Phone</th>
+              <th className="py-2">Aadhar</th>
               <th className="py-2">Address</th>
-              {/* <th className="py-2">Location</th> */}
               <th className="py-2">Actions</th>
             </tr>
           </thead>
@@ -189,20 +189,20 @@ const AdminApprovalPage: React.FC = () => {
                 <td className="py-2">{dBoy.name}</td>
                 <td className="py-2">{dBoy.email}</td>
                 <td className="py-2">{dBoy.phoneNumber}</td>
+                <td className="py-2">{dBoy.identity}</td>
                 <td className="py-2">{dBoy.address}</td>
-                {/* <td className="py-2">{dBoy.location?.lat},{dBoy.location?.lng}</td> */}
                 <td className="py-2">
                   <button
-                    onClick={() => handleApprovalDB(dBoy.id, "approved")}
+                    onClick={() => handleApprovalDB(dBoy.id, "reactivated")}
                     className="bg-green-500 text-white p-2 rounded mr-2"
                   >
-                    Approve
+                    Reactivate
                   </button>
                   <button
                     onClick={() => openModalDB(dBoy.id)}
                     className="bg-red-500 text-white p-2 rounded"
                   >
-                    Reject
+                    Block
                   </button>
                 </td>
               </tr>
@@ -234,4 +234,4 @@ const AdminApprovalPage: React.FC = () => {
   );
 };
 
-export default AdminApprovalPage;
+export default AdminPartners;

@@ -10,6 +10,7 @@ export interface Retailer {
     name: string;
     email: string;
     phoneNumber: string;
+    identity: string;
     address: string;
     location: string; // "latitude,longitude" format
     status: 'pending' | 'approved' | 'rejected';
@@ -21,6 +22,7 @@ export interface DeliveryBoy {
     name: string;
     email: string;
     phoneNumber: string;
+    identity: string;
     address: string;
     location: string; // "latitude,longitude" format
     status: 'pending' | 'approved' | 'rejected';

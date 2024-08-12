@@ -18,7 +18,7 @@ import AdminPage from "./components/admin/AdminPage.tsx";
 import OrderProcessing from "./components/admin/OrderProcessing.tsx";
 import AdminForm from "./components/admin/ManageRetailernDelivery.tsx";
 import RetailerRegistration from "./pages/RetailerRegistration.tsx";
-import AdminApprovalPage from "./components/admin/AdminApprovalPage.tsx";
+import AdminApprovalPage from "./components/admin/AdminPartners.tsx";
 import DeliveryBoyRegistration from "./pages/DeliveryBoyRegistration.tsx";
 import RetailerOrderPage from "./pages/RetailerOrderPage.tsx";
 import PartnerLogin from "./components/PartnerLogin.tsx";

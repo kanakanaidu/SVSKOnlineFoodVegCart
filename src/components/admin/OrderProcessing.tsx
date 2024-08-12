@@ -44,7 +44,7 @@ const OrderProcessing: React.FC = () => {
         // const [entityLat, entityLon] = entity.location.split(',').map(Number);
         const entLoc = JSON.stringify(entity.location);
         const entityLoc = JSON.parse(entLoc);
-        const distance = calculateDistance(orderLoc.lat, orderLoc.lng, entityLoc.lat, entityLoc.lng);
+        const distance = entityLoc ? calculateDistance(orderLoc.lat, orderLoc.lng, entityLoc.lat, entityLoc.lng): 0;
         return { ...entity, distance };
       })
       .sort((a, b) => a.distance - b.distance);
