@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchConfig } from './firebaseFunctions';
+// import { fetchConfig } from './firebaseFunctions';
 
 const sendWhatsApp = async (phoneNumber: any, message: any, imageData?: string) => {
     try {
