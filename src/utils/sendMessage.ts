@@ -11,8 +11,8 @@ const sendWhatsApp = async (phoneNumber: any, message: any, imageData?: string) 
             phone = '+91'+ last10Numbers;
         }
         // const base64Image = imageData.split(',')[1]; // Get base64 image data
-        // const apiEndpoint = 'http://ec2-13-201-99-56.ap-south-1.compute.amazonaws.com:3001/send-whatsapp'; // Replace with your API endpoint
-        const apiEndpoint = await fetchConfig();
+        const apiEndpoint = 'http://ec2-35-154-252-61.ap-south-1.compute.amazonaws.com:3001'; // Replace with your API endpoint
+        // const apiEndpoint = await fetchConfig();
         // console.log(`endpoint: ${process.env.REACT_APP_API_ENDPOINT}`);
 
         const response = await axios.post(apiEndpoint+'/send-whatsapp', {

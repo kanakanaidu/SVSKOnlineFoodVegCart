@@ -8,7 +8,7 @@ const ComingSoon: React.FC = () => {
   const targetDate = new Date("2024-08-15T09:00:00");
 
   const handleSecretButtonClick = () => {
-    navigate("/Home");
+    navigate("/home");
   };
 
   return (

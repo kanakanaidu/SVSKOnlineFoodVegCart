@@ -8,7 +8,7 @@ const PartnerLogin: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const [retailerId, setRetailerId] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const handleLogin = async (event: React.FormEvent) => {
@@ -16,12 +16,12 @@ const PartnerLogin: React.FC = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            setRetailerId(user.uid);
+            setUserId(user.uid);
 
             // Check if user is a retailer
             const retailerDoc = await getDoc(doc(firestore, 'retailers', user.uid));
             if (retailerDoc.exists()) {
-                navigate(`/retailerOrderPage?retailerId=${retailerId}`);
+                navigate(`/retailerOrderPage?retailerId=${userId}`);
                 return;
             }
             setError('User not found. Please check your email and password.');
