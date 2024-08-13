@@ -58,6 +58,7 @@ const DeliveryBoyRegistration: React.FC = () => {
       // const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: password will be shared once admin approved your account.`;
       const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\nAccount Type: Delivery Partner`;
       await sendWhatsApp(phone, whatsappMessage);
+      // @ts-ignore
       await sendWhatsApp(adminNumber?.REACT_APP_ADMIN_NUMBER, whatsappMessage);
 
       setName("");
@@ -140,7 +141,7 @@ const DeliveryBoyRegistration: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-          Location:
+            Location:
             {` ${selectedLocation?.lat}`}
             {`,${selectedLocation?.lng}`}
           </label>

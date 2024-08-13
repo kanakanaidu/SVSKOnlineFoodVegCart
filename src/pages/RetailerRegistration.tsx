@@ -63,6 +63,7 @@ const RetailerRegistration: React.FC = () => {
       // const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
       // setMessage(`Retailer created successfully! Share the login details: ${whatsappLink}`);
       await sendWhatsApp(phone, whatsappMessage);
+      // @ts-ignore
       await sendWhatsApp(adminNumber?.REACT_APP_ADMIN_NUMBER, whatsappMessage);
 
       setName("");
