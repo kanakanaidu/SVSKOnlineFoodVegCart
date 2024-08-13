@@ -16,7 +16,7 @@ import Button from "./reusables/Button.tsx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Search from "./Search.tsx";
 import { BsSearch } from "react-icons/bs";
-import { getUserRole, setUserRole } from "../utils/userService.ts";
+import { fetchConfig } from "../utils/firebaseFunctions.ts";
 
 const firebaseAuth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -52,7 +52,7 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);
   // @ts-ignore
-  const [loginType, setLoginType] = useState<string>('');
+  const [loginType, setLoginType] = useState<string>("");
 
   // const openModal = () => setModalIsOpen(true);
   // const closeModal = () => setModalIsOpen(false);
@@ -60,7 +60,11 @@ const Header = () => {
   useEffect(() => {
     const fetchUserRole = async () => {
       if (user?.uid) {
-        const userRole = await getUserRole(user.uid);
+        // const userRole = await getUserRole(user.uid);
+        const adminEmailsString = await fetchConfig("REACT_APP_ADMIN_EMAILS");
+        // @ts-ignore
+        const adminEmails = adminEmailsString?.REACT_APP_ADMIN_EMAILS;
+        const userRole = adminEmails.includes(user.email) ? "admin" : "user";
         setRole(userRole);
       }
       setLoading(false);
@@ -80,7 +84,14 @@ const Header = () => {
       } = await signInWithPopup(firebaseAuth, provider);
       console.log(refreshToken, providerData[0]);
       dispatch(setUser({ refreshToken, ...providerData[0] }));
-      await setUserRole(providerData[0]);
+
+      // const userRole = await setUserRole(providerData[0]);
+      const adminEmailsString = await fetchConfig("REACT_APP_ADMIN_EMAILS");
+      // @ts-ignore
+      const adminEmails = adminEmailsString?.REACT_APP_ADMIN_EMAILS;
+      const userRole = adminEmails.includes(providerData[0].email) ? "admin" : "user";
+      setRole(userRole);
+
       localStorage.setItem(
         "user",
         JSON.stringify({ refreshToken, ...providerData[0] })
@@ -248,15 +259,16 @@ const Header = () => {
                         <p>Account</p>
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </div>
-                      {user.email === "nj7055233@gmail.com" || user.email === "tkn123.mca@gmail.com" && (
-                        <Link
-                          to="/addItem"
-                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
-                        >
-                          <p>Add Item</p>
-                          <IoMdAdd className="text-[1.35rem]" />
-                        </Link>
-                      )}
+                      {user.email === "nj7055233@gmail.com" ||
+                        (user.email === "tkn123.mca@gmail.com" && (
+                          <Link
+                            to="/addItem"
+                            className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                          >
+                            <p>Add Item</p>
+                            <IoMdAdd className="text-[1.35rem]" />
+                          </Link>
+                        ))}
                       {role == "admin" && (
                         <Link
                           to="/admin"
@@ -336,19 +348,31 @@ const Header = () => {
                       }}
                       className="absolute right-0 top-16 flex flex-col w-40 bg-primaryBg border-gray-600 border rounded-lg shadow-xl py-2 w-max	items-stretch"
                     >
-                      <motion.button onClick={login}
-                        whileTap={{ scale: 0.8 }} className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                      <motion.button
+                        onClick={login}
+                        whileTap={{ scale: 0.8 }}
+                        className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
                       >
                         Login
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </motion.button>
-                      <div onClick={() => { setLoginType('retailer'); navigate("/partnerLogin") }}
-                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition">
+                      <div
+                        onClick={() => {
+                          setLoginType("retailer");
+                          navigate("/partnerLogin");
+                        }}
+                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition"
+                      >
                         <p>Retailer Login</p>
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </div>
-                      <div onClick={() => { setLoginType('delivery'); navigate("/partnerLogin") }}
-                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition">
+                      <div
+                        onClick={() => {
+                          setLoginType("delivery");
+                          navigate("/partnerLogin");
+                        }}
+                        className="cursor-pointer flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition"
+                      >
                         <p>Delivery Boy Login</p>
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </div>
