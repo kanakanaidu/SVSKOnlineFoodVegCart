@@ -11,7 +11,7 @@ import { firestore } from "../../firebase.config";
 import { Item } from "../store/slices/itemsSlice";
 
 interface Config {
-  apiEndpoint: string;
+  configValue: string;
 }
 
 export const saveItem = async (data: any) => {
@@ -67,8 +67,8 @@ export const searchItemWithTitle = async (title: string) => {
   return searchedItems;
 };
 
-export const fetchConfig = async (): Promise<Config> => {
-  const docRef = doc(firestore, "config", "REACT_APP_API_ENDPOINT");
+export const fetchConfig = async (API_ENDPOINT: string): Promise<Config> => {
+  const docRef = doc(firestore, "config", API_ENDPOINT);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid"; // for generating a unique password
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import sendWhatsApp from "../utils/sendMessage";
 import { toast } from "react-toastify";
+import { fetchConfig } from "../utils/firebaseFunctions";
 
 const DeliveryBoyRegistration: React.FC = () => {
   const [name, setName] = useState<string>("");
@@ -22,6 +23,7 @@ const DeliveryBoyRegistration: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const adminNumber = await fetchConfig("REACT_APP_ADMIN_NUMBER");
     const password = uuidv4().slice(0, 8); // generate an 8-character password
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -56,6 +58,7 @@ const DeliveryBoyRegistration: React.FC = () => {
       // const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: password will be shared once admin approved your account.`;
       const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\nAccount Type: Delivery Partner`;
       await sendWhatsApp(phone, whatsappMessage);
+      await sendWhatsApp(adminNumber?.REACT_APP_ADMIN_NUMBER, whatsappMessage);
 
       setName("");
       setEmail("");
@@ -137,7 +140,9 @@ const DeliveryBoyRegistration: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Location:{" "}
+          Location:
+            {` ${selectedLocation?.lat}`}
+            {`,${selectedLocation?.lng}`}
           </label>
           <MapPicker
             onLocationSelect={setSelectedLocation}

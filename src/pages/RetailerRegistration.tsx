@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid"; // for generating a unique password
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import sendWhatsApp from "../utils/sendMessage";
 import { toast } from "react-toastify";
+import { fetchConfig } from "../utils/firebaseFunctions";
 
 const RetailerRegistration: React.FC = () => {
   const [name, setName] = useState<string>("");
@@ -24,6 +25,7 @@ const RetailerRegistration: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const adminNumber = await fetchConfig("REACT_APP_ADMIN_NUMBER");
     const password = uuidv4().slice(0, 8); // generate an 8-character password
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -61,6 +63,7 @@ const RetailerRegistration: React.FC = () => {
       // const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
       // setMessage(`Retailer created successfully! Share the login details: ${whatsappLink}`);
       await sendWhatsApp(phone, whatsappMessage);
+      await sendWhatsApp(adminNumber?.REACT_APP_ADMIN_NUMBER, whatsappMessage);
 
       setName("");
       setEmail("");
@@ -142,7 +145,9 @@ const RetailerRegistration: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Location:{" "}
+            Location:
+            {` ${selectedLocation?.lat}`}
+            {`,${selectedLocation?.lng}`}
           </label>
           <MapPicker
             onLocationSelect={setSelectedLocation}
