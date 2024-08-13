@@ -25,12 +25,15 @@ const AboutContainer = () => {
               <span className="absolute bottom-0 right-0 w-3/4 h-[2px] bg-textColor"></span>
             </p>
             <p className="text-xxs sm:text-xs md:text-base">
-              At <span className="font-semibold">Lepakshi Online Kirana Store</span>, we're not
-              just passionate about food; we're passionate about delivering the
-              highest quality, freshest, and most delicious products to your
-              table. Our journey began with a simple goal - to provide families
-              with access to wholesome, farm-fresh produce that's as good for
-              you as it is for the planet.
+              At{" "}
+              <span className="font-semibold">
+                Lepakshi Online Kirana Store
+              </span>
+              , we're not just passionate about food; we're passionate about
+              delivering the highest quality, freshest, and most delicious
+              products to your table. Our journey began with a simple goal - to
+              provide families with access to wholesome, farm-fresh produce
+              that's as good for you as it is for the planet.
             </p>
           </div>
 
@@ -61,6 +64,9 @@ const AboutContainer = () => {
               grain is handpicked at the peak of ripeness, ensuring that you
               enjoy the full flavors and nutritional benefits.
             </p>
+          </div>
+          <div className="text-end">
+            <span className="absolute bottom-0 right-0 w-3/4 h-[2px] bg-textColor">Version: 1.0.0</span>
           </div>
         </div>
       </div>
