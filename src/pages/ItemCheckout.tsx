@@ -10,8 +10,6 @@ import { OrderSummaryData } from "./CheckoutPage";
 import OrderSummary from "../components/OrderSummary";
 import { Skeleton } from "../components/Skeleton";
 import { calculateDeliveryCharge } from "../utils/orderService";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 
 const quantityOption = [
   { value: 1, label: "1" },
