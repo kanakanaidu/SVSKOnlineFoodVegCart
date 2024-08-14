@@ -89,7 +89,9 @@ const Header = () => {
       const adminEmailsString = await fetchConfig("REACT_APP_ADMIN_EMAILS");
       // @ts-ignore
       const adminEmails = adminEmailsString?.REACT_APP_ADMIN_EMAILS;
-      const userRole = adminEmails.includes(providerData[0].email) ? "admin" : "user";
+      const userRole = adminEmails.includes(providerData[0].email)
+        ? "admin"
+        : "user";
       setRole(userRole);
 
       localStorage.setItem(
@@ -259,16 +261,16 @@ const Header = () => {
                         <p>Account</p>
                         <BiSolidUserCircle className="text-[1.35rem]" />
                       </div>
-                      {user.email === "nj7055233@gmail.com" ||
-                        (user.email === "tkn123.mca@gmail.com" && (
-                          <Link
-                            to="/addItem"
-                            className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
-                          >
-                            <p>Add Item</p>
-                            <IoMdAdd className="text-[1.35rem]" />
-                          </Link>
-                        ))}
+                      {/* {(user.email === "tkn123.mca@gmail.com" || */}
+                      {role == "admin" && (
+                        <Link
+                          to="/addItem"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>Add Item</p>
+                          <IoMdAdd className="text-[1.35rem]" />
+                        </Link>
+                      )}
                       {role == "admin" && (
                         <Link
                           to="/admin"

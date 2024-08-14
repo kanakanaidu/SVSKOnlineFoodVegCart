@@ -2,6 +2,13 @@ import { collection, addDoc, getDocs, doc, updateDoc, query, where } from 'fireb
 import { firestore } from '../../firebase.config';
 import { Order } from '../store/types';
 
+export const calculateDeliveryCharge = (orderAmount: number): number => {
+  if (orderAmount > 3000) return 0;  // Free delivery for orders over 3000
+  if (orderAmount > 500) return 100; // Delivery charge of 100 for orders up to 3000
+  if (orderAmount > 100) return 50;  // Delivery charge of 50 for orders up to 500
+  return 10;                          // Delivery charge of 10 for orders below 100
+};
+
 export const addOrder = async (order: Order) => {
   try {
     const docRef = await addDoc(collection(firestore, 'orders'), order);

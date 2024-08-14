@@ -113,7 +113,7 @@ const OrderList: React.FC = () => {
                             <ul>
                                 {order.orderItems.map((item, index) => (
                                     <li key={index}>
-                                        {item.title} (Qty: {item.qty}, Price: ${item.price})
+                                        {item.title} (Qty: {item.qty}, Price: ₹{item.price})
                                     </li>
                                 ))}
                             </ul>

@@ -1,5 +1,4 @@
 import { OrderSummaryData } from "../pages/CheckoutPage";
-import Payment from "payment";
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import Button from "./reusables/Button";
@@ -13,6 +12,7 @@ import { clearCart } from "../store/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { RingLoader } from "react-spinners";
 import { toast } from "react-toastify";
+// import Payment from "payment";
 
 type OrderSummaryProps = {
   // SendMessage: (event: SyntheticEvent) => void;
@@ -20,12 +20,13 @@ type OrderSummaryProps = {
 };
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
-  data: { items, formData, totalPrice },
+  // @ts-ignore
+  data: { items, formData, totalPrice, deliveryCharge, upiPaymentID },
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const issuer = Payment.fns.cardType(formData.number);
+  // const issuer = Payment.fns.cardType(formData.number);
   const captureRef = useRef<HTMLDivElement>(null);
 
   // @ts-ignore
@@ -45,8 +46,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   // @ts-ignore
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
   const SubmitOrder = async () => {
+    if (!paymentConfirmed) {
+      alert("Please confirm that the payment has been made.");
+      // return;
+    }
     setIsSubmitting(true);
     setIsSubmitted(false);
     try {
@@ -197,23 +203,28 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                         <span>
                           {item.qty} x{" "}
                           <span className="capitalize">{item.title}</span>
+                          <span className="capitalize">{` @ ₹ ${item.price}`}</span>
                         </span>
-                        <span className="font-semibold">₹ {item.price}</span>
+                        <span className="font-semibold">
+                          ₹ {parseInt(item.qty) * parseInt(item.price)}
+                        </span>
                       </div>
                     );
                   })}
 
                   <div className="flex items-center justify-between mt-4">
                     <span>Delivery</span>
-                    <span className="font-semibold">₹ 0.0</span>
+                    <span className="font-semibold">₹ {deliveryCharge}</span>
                   </div>
                   <div className="flex items-center justify-between ">
                     <span>Tax</span>
                     <span className="font-semibold">₹ 0.0</span>
                   </div>
                   <div className="flex items-center justify-between mt-5 pt-2 border-t border-white">
-                    <span>Total</span>
-                    <span className="font-semibold">₹ {totalPrice}</span>
+                    <span>Grand Total</span>
+                    <span className="font-semibold">
+                      ₹ {totalPrice + deliveryCharge}
+                    </span>
                   </div>
                 </div>
 
@@ -235,11 +246,34 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 {/* Payment Details */}
                 <table>
                   <tr>
-                    <td>Tracking</td>
-                    <td>:</td>
-                    <td>8008XXXX8008</td>
+                    <td colSpan={3}>
+                      <div className="mb-4">
+                        <p>Scan the QR code to complete your payment:</p>
+                        <img
+                          src="/images/GooglePay_QR.png"
+                          alt="QR Code"
+                          className="w-40 h-40"
+                        />
+                      </div>
+                    </td>
                   </tr>
                   <tr>
+                    <td colSpan={3}>
+                      <br />
+                      <input
+                        type="checkbox"
+                        id="paymentConfirmed"
+                        checked={paymentConfirmed}
+                        onChange={(e) => setPaymentConfirmed(e.target.checked)}
+                        className="mr-2"
+                      />
+                      <label htmlFor="paymentConfirmed" className="text-sm">
+                        I confirm that the payment of ₹{totalPrice} has been
+                        made.
+                      </label>
+                    </td>
+                  </tr>
+                  {/* <tr>
                     <td>Payment</td>
                     <td>:</td>
                     <td>
@@ -251,7 +285,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                     <td>Name</td>
                     <td>:</td>
                     <td>{formData.name}</td>
-                  </tr>
+                  </tr> */}
                 </table>
               </div>
               <Button

@@ -9,6 +9,9 @@ import { CheckoutFormSchema } from "../utils/zodSchemas";
 import { OrderSummaryData } from "./CheckoutPage";
 import OrderSummary from "../components/OrderSummary";
 import { Skeleton } from "../components/Skeleton";
+import { calculateDeliveryCharge } from "../utils/orderService";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const quantityOption = [
   { value: 1, label: "1" },
@@ -25,7 +28,12 @@ const ItemCheckout = () => {
   const [orderSummaryData, setOrderSummaryData] =
     useState<OrderSummaryData | null>(null);
   const [loading, setLoading] = useState(true);
-
+  // const deliveryCharges = useSelector((state: RootState) => {
+  //   if (state.cart.cartTotal > 3000) return 0;
+  //   if (state.cart.cartTotal > 500) return 100;
+  //   if (state.cart.cartTotal > 100) return 50;
+  //   return 10;
+  // });
   useEffect(() => {
     const fetchItem = async () => {
       const docRef = doc(firestore, "foodItems", params.itemId);
@@ -45,9 +53,13 @@ const ItemCheckout = () => {
   }
 
   const onSubmitHandler = (data: CheckoutFormSchema) => {
+    const deliveryCharges = calculateDeliveryCharge(parseFloat(item.price)*qty.value);
+
     setOrderSummaryData({
       items: [{ ...item, qty: `${qty.value}` }],
       totalPrice: parseFloat(item.price) * qty.value,
+      deliveryCharge: deliveryCharges,
+      upiPaymentID: "",
       formData: data,
     });
   };
@@ -120,10 +132,10 @@ const ItemCheckout = () => {
                       </span>
                     </p>
                   </div>
-                  <div className="my-1 flex items-center justify-between border-b  border-primary text-sm">
+                  {/* <div className="my-1 flex items-center justify-between border-b  border-primary text-sm">
                     <p>Delivery Charges</p>
-                    <p className="text-green-500">Free</p>
-                  </div>
+                    <p className="text-green-500">₹ {deliveryCharges}</p>
+                  </div> */}
                   <div className="flex items-center justify-between my-2">
                     <p className="text-lg font-semibold">Total</p>
                     <p className="text-lg font-semibold">
