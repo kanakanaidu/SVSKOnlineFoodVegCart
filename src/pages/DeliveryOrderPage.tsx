@@ -16,9 +16,11 @@ const DeliveryOrderPage: React.FC = () => {
           const ordersRet = await getDeliveryOrders(deliveryId);
           setOrders(ordersRet);
           setLoading(false);
+          return;
         } catch (error) {
           setError("Failed to fetch orders");
           setLoading(false);
+          return;
         }
       }
       setError(`${deliveryId} deliveryId is not correct. please try again.`);
@@ -62,25 +64,37 @@ const DeliveryOrderPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td className="py-2">{order.customerName}</td>
-              <td className="py-2">{order.orderItems.join(", ")}</td>
-              <td className="py-2">{order.orderItems.join(", ")}</td>
-              <td className="py-2">₹ {order.orderValue}</td>
-              <td className="py-2">{order.status}</td>
-              <td className="py-2">
-                <select
-                  value={order.status}
-                  onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                  className="p-2 border rounded"
-                >
-                  <option value="pending">Out for Delivery</option>
-                  <option value="completed">Delivered at Home</option>
-                </select>
+          {orders.length <= 0 && (
+            <tr>
+              <td className="text-center" colSpan={6}>
+                <h1 className="font-bold mb-4 text-rose-500">
+                  no orders assigned for you.
+                </h1>
               </td>
             </tr>
-          ))}
+          )}
+          {orders.length > 0 &&
+            orders.map((order) => (
+              <tr key={order.id}>
+                <td className="py-2">{order.customerName}</td>
+                <td className="py-2">{order.orderItems.join(", ")}</td>
+                <td className="py-2">{order.orderItems.join(", ")}</td>
+                <td className="py-2">₹ {order.orderValue}</td>
+                <td className="py-2">{order.status}</td>
+                <td className="py-2">
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      handleStatusChange(order.id, e.target.value)
+                    }
+                    className="p-2 border rounded"
+                  >
+                    <option value="pending">Out for Delivery</option>
+                    <option value="completed">Delivered at Home</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
