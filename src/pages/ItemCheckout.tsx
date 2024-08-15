@@ -59,7 +59,6 @@ const ItemCheckout = () => {
       items: [{ ...item, qty: `${qty.value}` }],
       totalPrice: parseFloat(item.price) * qty.value,
       deliveryCharge: deliveryCharges,
-      upiPaymentID: "",
       formData: data,
     });
   };
