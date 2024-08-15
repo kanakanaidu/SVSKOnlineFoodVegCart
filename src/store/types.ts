@@ -47,4 +47,5 @@ export interface Order {
     retailerId?: string;
     deliveryBoyId?: string;
     remarks?: string;
+    paymentRef?: string;
 }

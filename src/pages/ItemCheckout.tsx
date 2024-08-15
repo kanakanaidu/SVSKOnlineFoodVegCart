@@ -51,7 +51,9 @@ const ItemCheckout = () => {
   }
 
   const onSubmitHandler = (data: CheckoutFormSchema) => {
-    const deliveryCharges = calculateDeliveryCharge(parseFloat(item.price)*qty.value);
+    const deliveryCharges = calculateDeliveryCharge(
+      parseFloat(item.price) * qty.value
+    );
 
     setOrderSummaryData({
       items: [{ ...item, qty: `${qty.value}` }],
@@ -124,7 +126,7 @@ const ItemCheckout = () => {
                       Price x (<span>{qty.value}</span> qty)
                     </p>
                     <p>
-                      ${" "}
+                      ₹{" "}
                       <span>
                         {item.price} x {qty.value}
                       </span>

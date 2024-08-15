@@ -22,8 +22,9 @@ import AdminApprovalPage from "./components/admin/AdminPartners.tsx";
 import DeliveryBoyRegistration from "./pages/DeliveryBoyRegistration.tsx";
 import RetailerOrderPage from "./pages/RetailerOrderPage.tsx";
 import PartnerLogin from "./components/PartnerLogin.tsx";
-import ComingSoon from "./pages/ComingSoon.tsx";
 import { ToastContainer } from "react-toastify";
+import DeliveryOrderPage from "./pages/DeliveryOrderPage.tsx";
+import ComingSoon from "./pages/ComingSoon.tsx";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "/retailerOrderPage",
         element: <RetailerOrderPage />,
+      },
+      {
+        path: "/deliveryOrderPage",
+        element: <DeliveryOrderPage />,
       },
       {
         path: "/partnerLogin",

@@ -109,6 +109,29 @@ export const getRetailerOrders = async (retailerId: string) => {
   // return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getDeliveryOrders = async (deliveryId: string) => {
+  const orders: Order[] = [];
+  const q = query(collection(firestore, "orders"), where("deliveryId", "==", deliveryId));
+  const querySnapshot = await getDocs(q);
+  for (const docSnapshot of querySnapshot.docs) {
+    const orderData = docSnapshot.data();
+    orders.push({
+      id: docSnapshot.id, // Add the ID to the order for identification
+      customerName: orderData.customerName,
+      customerEmail: orderData.customerEmail,
+      address: orderData.address,
+      orderItems: orderData.orderItems,
+      orderValue: orderData.orderValue,
+      status: orderData.status,
+      location: orderData.location,
+      retailerId: orderData.retailerId,
+      deliveryBoyId: orderData.deliveryBoyId
+    });
+  }
+  return orders;
+  // return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
 export const updateOrderStatus = async (orderId: string, status: string) => {
   const orderRef = doc(firestore, "orders", orderId);
   await updateDoc(orderRef, { status: status });

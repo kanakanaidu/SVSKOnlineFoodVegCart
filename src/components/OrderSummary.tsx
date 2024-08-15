@@ -12,7 +12,7 @@ import { clearCart } from "../store/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { RingLoader } from "react-spinners";
 import { toast } from "react-toastify";
-// import Payment from "payment";
+import { fetchConfig } from "../utils/firebaseFunctions";
 
 type OrderSummaryProps = {
   // SendMessage: (event: SyntheticEvent) => void;
@@ -21,7 +21,7 @@ type OrderSummaryProps = {
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
   // @ts-ignore
-  data: { items, formData, totalPrice, deliveryCharge, upiPaymentID },
+  data: { items, formData, totalPrice, deliveryCharge },
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const captureRef = useRef<HTMLDivElement>(null);
 
   // @ts-ignore
-  const [customerName, setCustomerName] = useState("");
+  // const [customerName, setCustomerName] = useState("");
   // @ts-ignore
   const [address, setAddress] = useState("");
   const [orders, setOrders] = useState<OrderItem[]>([]);
@@ -47,12 +47,11 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   // @ts-ignore
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [paymentReference, setPaymentReference] = useState<string>("");
 
   const SubmitOrder = async () => {
-    if (!paymentConfirmed) {
-      alert("Please confirm that the payment has been made.");
-      // return;
-    }
+    const adminNumber = await fetchConfig("REACT_APP_ADMIN_NUMBER");
+
     setIsSubmitting(true);
     setIsSubmitted(false);
     try {
@@ -82,9 +81,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             setOrders([...orders, newItem]);
           }
 
-          if (currUser?.displayName) {
-            setCustomerName(currUser.displayName);
-          }
+          // if (currUser?.displayName) {
+          //   setCustomerName(currUser.displayName);
+          // }
           if (formData.address) {
             setAddress(formData.address);
           }
@@ -98,20 +97,36 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             orderValue: totalPrice.toString(),
             status: status,
             location: custLocation,
+            paymentRef: paymentReference,
           };
-
+          if (!paymentConfirmed || !paymentReference) {
+            alert(
+              "Please confirm that the payment has been made and reference added."
+            );
+            return;
+          }
           const orderId = await addOrder(newOrder);
-          setCustomerName("");
+          // setCustomerName("");
           setAddress("");
           setOrders([]);
           setStatus("pending");
+          setPaymentReference("");
           // clearCart();
-          // Send the screenshot via WhatsApp
+          // Send the order copy via WhatsApp
           await sendWhatsApp(
             formData.phone,
             "Please find the invoice copy for your order...",
             imageUrl
           );
+
+          // send order copy to admin
+          await sendWhatsApp(
+            // @ts-ignore
+            adminNumber?.REACT_APP_ADMIN_NUMBER,
+            `Please find the invoice copy for Order ID: ${orderId}`,
+            imageUrl
+          );
+
           dispatch(clearCart());
           toast.success(
             `Order submitted successfully, your order ID: ${orderId} 😍`
@@ -217,13 +232,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                     <span className="font-semibold">₹ {deliveryCharge}</span>
                   </div>
                   <div className="flex items-center justify-between ">
-                    <span>Tax</span>
-                    <span className="font-semibold">₹ 0.0</span>
+                    <span>Service Charge</span>
+                    <span className="font-semibold">₹ {totalPrice * 0.06}</span>
                   </div>
                   <div className="flex items-center justify-between mt-5 pt-2 border-t border-white">
                     <span>Grand Total</span>
                     <span className="font-semibold">
-                      ₹ {totalPrice + deliveryCharge}
+                      ₹ {totalPrice + deliveryCharge + totalPrice * 0.06}
                     </span>
                   </div>
                 </div>
@@ -273,6 +288,24 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                       </label>
                     </td>
                   </tr>
+                  <tr>
+                    <td colSpan={3} className="text-red-500">
+                      <label
+                        htmlFor="paymentReference"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Payment Reference:
+                      </label>
+                      <input
+                        type="text"
+                        id="paymentReference"
+                        value={paymentReference}
+                        onChange={(e) => setPaymentReference(e.target.value)}
+                        placeholder="Enter your payment reference"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </td>
+                  </tr>
                   {/* <tr>
                     <td>Payment</td>
                     <td>:</td>
@@ -296,7 +329,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 onClick={async () => {
                   // await sendWhatsApp(to, message);
                   // await sendWhatsApp(formData.phone, "this message from react project...");
-                  SubmitOrder();
+                  await SubmitOrder();
                   navigate("/");
                 }}
               >

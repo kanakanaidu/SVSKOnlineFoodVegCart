@@ -15,12 +15,15 @@ const CartTotal: React.FC<CartTotalProps> = ({
 }) => {
   const navigate = useNavigate();
   const totalPrice = useSelector((state: RootState) => state.cart.cartTotal);
-  const deliveryCharges = useSelector((state: RootState) => {
-    if (state.cart.cartTotal > 3000) return 0;
-    if (state.cart.cartTotal > 500) return 100;
-    if (state.cart.cartTotal > 100) return 50;
-    return 10;
-  });
+  const deliveryCharges =
+    totalPrice > 0
+      ? useSelector((state: RootState) => {
+          if (state.cart.cartTotal > 3000) return 0;
+          if (state.cart.cartTotal > 500) return 100;
+          if (state.cart.cartTotal > 100) return 50;
+          return 10;
+        })
+      : 0;
   const numOfCartItems = useSelector(
     (state: RootState) => state.cart.numOfCartItems
   );
@@ -49,9 +52,11 @@ const CartTotal: React.FC<CartTotalProps> = ({
       </div>
       <div className="flex items-center justify-between my-2">
         <p className="text-lg font-semibold">Total</p>
-        <p className="text-lg font-semibold">₹ {totalPrice+deliveryCharges}</p>
+        <p className="text-lg font-semibold">
+          ₹ {totalPrice + deliveryCharges}
+        </p>
       </div>
-      {!removeProceedBtn && (
+      {!removeProceedBtn && totalPrice > 0 && (
         <Button onClick={() => navigate("/checkout")} className="w-full">
           Proceed
         </Button>

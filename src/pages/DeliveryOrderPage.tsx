@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Order } from "../store/types";
-import { getRetailerOrders, updateOrderStatus } from "../utils/orderService";
+import { getDeliveryOrders, updateOrderStatus } from "../utils/orderService";
 
 const DeliveryOrderPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -13,7 +13,7 @@ const DeliveryOrderPage: React.FC = () => {
     const fetchOrders = async () => {
       if (deliveryId) {
         try {
-          const ordersRet = await getRetailerOrders(deliveryId);
+          const ordersRet = await getDeliveryOrders(deliveryId);
           setOrders(ordersRet);
           setLoading(false);
         } catch (error) {
@@ -75,10 +75,8 @@ const DeliveryOrderPage: React.FC = () => {
                   onChange={(e) => handleStatusChange(order.id, e.target.value)}
                   className="p-2 border rounded"
                 >
-                  <option value="pending">Pending</option>
-                  <option value="pending">Packing</option>
-                  <option value="processing">Processing</option>
-                  <option value="completed">ReadyToPick</option>
+                  <option value="pending">Out for Delivery</option>
+                  <option value="completed">Delivered at Home</option>
                 </select>
               </td>
             </tr>

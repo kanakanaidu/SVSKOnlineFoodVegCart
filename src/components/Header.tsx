@@ -298,6 +298,24 @@ const Header = () => {
                           <TbShoppingCart className="text-[1.35rem]" />
                         </Link>
                       )}
+                      {role == "retailer" && (
+                        <Link
+                          to="/retailerOrderPage"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>My Orders</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
+                      {role == "dBoy" && (
+                        <Link
+                          to="/deliveryOrderPage"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>My Orders</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
                       <div
                         onClick={logout}
                         className="cursor-pointer border-t rounded-b-lg border-gray-600 flex justify-between px-6 py-2 gap-2 items-center hover:bg-primary hover:text-white transition"

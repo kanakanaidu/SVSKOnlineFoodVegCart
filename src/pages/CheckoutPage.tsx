@@ -7,7 +7,6 @@ import { CheckoutFormSchema } from "../utils/zodSchemas";
 import OrderSummary from "../components/OrderSummary";
 import { useState } from "react";
 import { CartItem } from "../store/slices/cartSlice";
-import { fetchConfig } from "../utils/firebaseFunctions";
 import { calculateDeliveryCharge } from "../utils/orderService";
 
 export type OrderSummaryData = {
@@ -15,7 +14,7 @@ export type OrderSummaryData = {
   formData: CheckoutFormSchema;
   totalPrice: number;
   deliveryCharge: number;
-  upiPaymentID: string;
+  // upiPaymentID: string;
 };
 
 const CheckoutPage = () => {
@@ -25,11 +24,11 @@ const CheckoutPage = () => {
     useState<OrderSummaryData | null>(null);
 
   const onSubmitHandler = async (data: CheckoutFormSchema) => {
-    const upiPaymentID = await fetchConfig("REACT_APP_UPI_PAYMNET_ID");
-    const upiID = upiPaymentID
-      ? // @ts-ignore
-        upiPaymentID?.REACT_APP_UPI_PAYMNET_ID
-      : "Configure UPI ID in firestore database.";
+    // const upiPaymentID = await fetchConfig("REACT_APP_UPI_PAYMNET_ID");
+    // const upiID = upiPaymentID
+    //   ? // @ts-ignore
+    //     upiPaymentID?.REACT_APP_UPI_PAYMNET_ID
+    //   : "Configure UPI ID in firestore database.";
 
     const deliveryCharges = await calculateDeliveryCharge(totalPrice);
     console.log("submited Data from checkout form", data);
@@ -38,7 +37,7 @@ const CheckoutPage = () => {
       formData: data,
       totalPrice: totalPrice,
       deliveryCharge: deliveryCharges,
-      upiPaymentID: upiID,
+      // upiPaymentID: upiID,
     });
   };
 
