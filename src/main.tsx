@@ -24,7 +24,7 @@ import RetailerOrderPage from "./pages/RetailerOrderPage.tsx";
 import PartnerLogin from "./components/PartnerLogin.tsx";
 import { ToastContainer } from "react-toastify";
 import DeliveryOrderPage from "./pages/DeliveryOrderPage.tsx";
-import ComingSoon from "./pages/ComingSoon.tsx";
+// import ComingSoon from "./pages/ComingSoon.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ComingSoon />,
+        element: <HomePage />,
       },
       {
         path: "/Home",
