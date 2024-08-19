@@ -13,6 +13,11 @@ export const fetchUser = (): User | null => {
   return user ? JSON.parse(user) : null;
 };
 
+export const fetchRole = (): string | null =>{
+  const role = localStorage.getItem("userRole");
+  return role ? role : null;
+}
+
 export const fetchCartItems = (): CartInfo | null => {
   const cartItems = localStorage.getItem("cartItems");
   return cartItems ? JSON.parse(cartItems) : null;

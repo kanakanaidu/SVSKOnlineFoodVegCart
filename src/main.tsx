@@ -24,6 +24,8 @@ import RetailerOrderPage from "./pages/RetailerOrderPage.tsx";
 import PartnerLogin from "./components/PartnerLogin.tsx";
 import { ToastContainer } from "react-toastify";
 import DeliveryOrderPage from "./pages/DeliveryOrderPage.tsx";
+import Unauthorized from "./components/Unauthorized.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 // import ComingSoon from "./pages/ComingSoon.tsx";
 
 const router = createBrowserRouter([
@@ -42,15 +44,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/addItem",
-        element: <AddItemPage />,
+        element: <ProtectedRoute element={<AddItemPage />} allowedRoles={["admin", "retailer"]} />,
       },
       {
         path: "/admin",
-        element: <AdminPage />,
+        element: <ProtectedRoute element={<AdminPage />} allowedRoles={["admin"]} />,
       },
       {
         path: "/orderProcess",
-        element: <OrderProcessing />,
+        element: <ProtectedRoute element={<OrderProcessing />} allowedRoles={["admin"]} />,
       },
       {
         path: "/myOrders",
@@ -58,31 +60,31 @@ const router = createBrowserRouter([
       },
       {
         path: "/adminOrders",
-        element: <AdminOrdersPage />,
+        element: <ProtectedRoute element={<AdminOrdersPage />} allowedRoles={["admin"]} />,
       },
       {
         path: "/adminForm",
-        element: <AdminForm />,
+        element: <ProtectedRoute element={<AdminForm />} allowedRoles={["admin"]} />,
       },
       {
         path: "/retailerRegister",
-        element: <RetailerRegistration />,
+        element: <ProtectedRoute element={<RetailerRegistration />} allowedRoles={["admin"]} />,
       },
       {
         path: "/deliveryBoyRegistration",
-        element: <DeliveryBoyRegistration />,
+        element: <ProtectedRoute element={<DeliveryBoyRegistration />} allowedRoles={["admin"]} />,
       },
       {
         path: "/AdminApprovalPage",
-        element: <AdminApprovalPage />,
+        element: <ProtectedRoute element={<AdminApprovalPage />} allowedRoles={["admin"]} />,
       },
       {
         path: "/retailerOrderPage",
-        element: <RetailerOrderPage />,
+        element: <ProtectedRoute element={<RetailerOrderPage />} allowedRoles={["retailer"]} />,
       },
       {
         path: "/deliveryOrderPage",
-        element: <DeliveryOrderPage />,
+        element: <ProtectedRoute element={<DeliveryOrderPage />} allowedRoles={["dBoy"]} />,
       },
       {
         path: "/partnerLogin",
@@ -90,16 +92,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout",
-        element: <CheckoutPage />,
+        element: <ProtectedRoute element={<CheckoutPage />} allowedRoles={["user"]} />,
       },
       {
         path: "/checkout/:itemId",
-        element: <ItemCheckout />,
+        element: <ProtectedRoute element={<CheckoutPage />} allowedRoles={["user"]} />,
       },
       {
         path: "/item/:itemId",
         element: <ItemPage />,
       },
+      {
+        path: "/unauthorized",
+        element: <Unauthorized/>
+      }
     ],
     errorElement: <Error />,
   },

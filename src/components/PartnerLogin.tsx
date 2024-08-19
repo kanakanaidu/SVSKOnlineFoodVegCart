@@ -34,10 +34,15 @@ const PartnerLogin: React.FC = () => {
         password
       );
       dispatch(setUser({ refreshToken, ...providerData[0]  }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ refreshToken, ...providerData[0] })
+      );
       // Check if user is a retailer
       const retailerDoc = await getDoc(doc(firestore, "retailers", uid));
       if (retailerDoc.exists()) {
         setRole("retailer");
+        localStorage.setItem("userRole","retailer");
         navigate(`/retailerOrderPage?retailerId=${uid}`);
         return;
       }
@@ -47,6 +52,7 @@ const PartnerLogin: React.FC = () => {
       );
       if (deliveryDoc.exists()) {
         setRole("dBoy");
+        localStorage.setItem("userRole","dBoy");
         navigate(`/deliveryOrderPage?deliveryId=${uid}`);
         return;
       }

@@ -93,7 +93,7 @@ const Header = () => {
         ? "admin"
         : "user";
       setRole(userRole);
-
+      localStorage.setItem("userRole", userRole);
       localStorage.setItem(
         "user",
         JSON.stringify({ refreshToken, ...providerData[0] })
