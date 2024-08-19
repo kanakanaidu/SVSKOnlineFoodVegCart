@@ -1,14 +1,18 @@
 import { BiDish } from "react-icons/bi";
-import { categories } from "../../pages/AddItemPage";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import ItemCard from "../reusables/ItemCard";
+import { CategoriesContext } from "../../App";
+// import { categories } from "../../pages/AddItemPage";
 
 const MenuContainer = () => {
   const items = useSelector((state: RootState) => state.items.items);
-  const [inputCategory, setInputCategory] = useState<string>(categories[0]);
+  // const [inputCategory, setInputCategory] = useState<string>(categories[0]);
+  const categories = useContext(CategoriesContext);
+  const [inputCategory, setInputCategory] = useState<string>("");
+  
   const filteredItems = items?.filter(
     (item) => item.category === inputCategory
   );

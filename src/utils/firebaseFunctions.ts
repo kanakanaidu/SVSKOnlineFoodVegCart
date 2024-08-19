@@ -77,3 +77,16 @@ export const fetchConfig = async (API_ENDPOINT: string): Promise<Config> => {
     throw new Error("No such document!");
   }
 };
+
+export const fetchCategories = async (): Promise<string[]> => {
+  try {
+    const querySnapshot = await getDocs(collection(firestore, "categories"));
+    const categoriesList: string[] = querySnapshot.docs.map(
+      (doc) => doc.data().name
+    );
+    return categoriesList;
+  } catch (error) {
+    console.error("Error fetching categories: ", error);
+    return [];
+  }
+};

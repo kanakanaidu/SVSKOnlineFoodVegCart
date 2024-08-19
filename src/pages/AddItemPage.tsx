@@ -2,7 +2,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BiSolidCloudUpload, BiLoaderAlt } from "react-icons/bi";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   deleteObject,
   getDownloadURL,
@@ -13,31 +13,34 @@ import { storage } from "../../firebase.config";
 import { RxCross2 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import { saveItem } from "../utils/firebaseFunctions";
+import { CategoriesContext } from "../App";
 
-export const categories = [
-  "fruits",
-  "fashion",
-  "rice",
-  "vegetables",
-  "mobile accessories",
-  "icecreams",
-  "meet",
-  "drinks",
-  "others",
-] as const;
+// export const categories = [
+//   "fruits",
+//   "food",
+//   "groceries",
+//   "vegetables",
+//   "fashion",
+//   "mobile accessories",
+//   "icecreams",
+//   "meet",
+//   "drinks",
+// ] as const;
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required!!" }),
   calories: z.string().min(1, { message: "Calories is required!!" }),
-  category: z.enum(categories),
   imageUrl: z.string().min(1, { message: "Image is required!!" }),
   price: z.string().min(1, { message: "Price is required!!" }),
   description: z.string().min(1, { message: "Description is required!!" }),
+  category: z.string().min(1, { message: "Category is required!!" }),
+  // category: z.enum(categories),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
 const AddItemPage = () => {
+  const categories = useContext(CategoriesContext);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const {
@@ -177,6 +180,9 @@ const AddItemPage = () => {
             placeholder="Select category"
             className="w-full text-lg capitalize cursor-pointer p-2 ring-1 !ring-gray-400 outline-primary "
           >
+            <option value="" disabled>
+              Select a category
+            </option>
             {categories.map((category) => (
               <option
                 key={category}
