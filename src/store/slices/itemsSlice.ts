@@ -3,18 +3,18 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface Item {
   databaseId: string;
-  calories: string;
+  quantity: string;
   category: string;
   description:
     | "fashion"
-    | "rice"
+    | "food"
     | "fruits"
     | "vegetables"
     | "mobile accessories"
     | "icecreams"
     | "meet"
     | "drinks"
-    | "others";
+    | "groceries";
   id: string;
   imageUrl: string;
   price: string;

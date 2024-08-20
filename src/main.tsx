@@ -4,10 +4,10 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import AddItemPage from "./pages/AddItemPage.tsx";
+import AddItemPage from "./pages/Item/AddItemPage.tsx";
 import { store } from "./store/store.ts";
 import { Provider } from "react-redux";
-import ItemPage from "./pages/ItemPage.tsx";
+import ItemPage from "./pages/Item/ItemPage.tsx";
 import Error from "./components/Error.tsx";
 import SearchPage from "./pages/SearchPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
@@ -96,7 +96,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout/:itemId",
-        element: <ProtectedRoute element={<CheckoutPage />} allowedRoles={["user"]} />,
+        element: <ProtectedRoute element={<ItemCheckout />} allowedRoles={["user"]} />,
       },
       {
         path: "/item/:itemId",

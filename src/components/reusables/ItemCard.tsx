@@ -51,7 +51,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
             Price - ₹ <span className="font-semibold">{item.price}</span>
           </p>
           <p className="text-xs xs:text-sm font-medium">
-            Calories - <span className="font-semibold">{item.calories}</span>
+            Quantity - <span className="font-semibold">{item.quantity}</span>
           </p>
         </div>
 

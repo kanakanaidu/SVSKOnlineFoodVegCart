@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getItemWithId } from "../utils/firebaseFunctions";
-import { Item } from "../store/slices/itemsSlice";
-import { AiFillTag } from "react-icons/ai";
+import { getItemWithId } from "../../utils/firebaseFunctions";
+import { Item } from "../../store/slices/itemsSlice";
+// import { AiFillTag } from "react-icons/ai";
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { addToCart, removeFromCart } from "../store/slices/cartSlice";
-import ItemsSlider from "../components/reusables/ItemsSlider";
-import { Skeleton } from "../components/Skeleton";
-import Button from "../components/reusables/Button";
+import { RootState } from "../../store/store";
+import { addToCart, removeFromCart } from "../../store/slices/cartSlice";
+import ItemsSlider from "../../components/reusables/ItemsSlider";
+import { Skeleton } from "../../components/Skeleton";
+import Button from "../../components/reusables/Button";
 
 const ItemPage = () => {
   const params = useParams() as { itemId: string };
@@ -105,9 +105,9 @@ const ItemPage = () => {
                 </p>
               </div>
               <div className="">
-                <span className="sm:text-sm text-green-600">Calories</span>
+                <span className="sm:text-sm text-green-600">Quantity</span>
                 <p className="text-lg sm:text-2xl text-textColor">
-                  {item.calories} <span className="text-sm">per 100gm</span>
+                  {item.quantity}
                 </p>
               </div>
 

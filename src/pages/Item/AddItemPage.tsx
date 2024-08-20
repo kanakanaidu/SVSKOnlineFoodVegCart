@@ -2,18 +2,19 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BiSolidCloudUpload, BiLoaderAlt } from "react-icons/bi";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   deleteObject,
   getDownloadURL,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { storage } from "../../firebase.config";
+import { firestore, storage } from "../../../firebase.config";
 import { RxCross2 } from "react-icons/rx";
 import { motion } from "framer-motion";
-import { saveItem } from "../utils/firebaseFunctions";
-import { CategoriesContext } from "../App";
+import { saveItem } from "../../utils/firebaseFunctions";
+import { CategoriesContext } from "../../App";
+import { collection, getDocs } from "firebase/firestore";
 
 // export const categories = [
 //   "fruits",
@@ -29,11 +30,13 @@ import { CategoriesContext } from "../App";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required!!" }),
-  calories: z.string().min(1, { message: "Calories is required!!" }),
   imageUrl: z.string().min(1, { message: "Image is required!!" }),
   price: z.string().min(1, { message: "Price is required!!" }),
   description: z.string().min(1, { message: "Description is required!!" }),
   category: z.string().min(1, { message: "Category is required!!" }),
+  retailer: z.string().min(1, { message: "Retailer is required!!" }),
+  quantity: z.string().min(1, { message: "Quantity is required!!" }),
+  // calories: z.string().min(1, { message: "Calories is required!!" }),
   // category: z.enum(categories),
 });
 
@@ -52,6 +55,22 @@ const AddItemPage = () => {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
   });
+  const [retailers, setRetailers] = useState<string[]>([]);
+  // const [selectedCategories, setSelectedCategories] = useState<string>("");
+
+  useEffect(() => {
+    const fetchRetailers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, "retailers"));
+        const retailersList = querySnapshot.docs.map((doc) => doc.data().name);
+        setRetailers(retailersList);
+      } catch (error) {
+        console.error("Error fetching retailers: ", error);
+      }
+    };
+
+    fetchRetailers();
+  }, []);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -173,15 +192,20 @@ const AddItemPage = () => {
         </div>
 
         <div>
+          <label htmlFor="category" className="text-lg font-medium">
+            Category:
+          </label>
           <select
             {...register("category")}
             name="category"
             id="category"
             placeholder="Select category"
-            className="w-full text-lg capitalize cursor-pointer p-2 ring-1 !ring-gray-400 outline-primary "
+            className="capitalize mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            defaultValue=""
+            // onChange={(e) => setSelectedCategories(e.target.value)}
           >
             <option value="" disabled>
-              Select a category
+              Select category
             </option>
             {categories.map((category) => (
               <option
@@ -194,10 +218,37 @@ const AddItemPage = () => {
             ))}
           </select>
         </div>
-
+        <div>
+          <label htmlFor="retailer" className="text-lg font-medium">
+            Retailer:
+          </label>
+          <select
+            {...register("retailer")}
+            name="retailer"
+            id="retailer"
+            // value={selectedRetailer}
+            // onChange={(e) => setSelectedRetailer(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Select Retailer
+            </option>
+            {retailers.map((retailer) => (
+              <option key={retailer} value={retailer}>
+                {retailer}
+              </option>
+            ))}
+          </select>
+          {errors.retailer && (
+            <span className="absolute top-2 right-2 text-red-600 text-xs">
+              {errors.retailer.message}
+            </span>
+          )}
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex flex-col gap-2 relative">
-            <label htmlFor="title" className="text-lg font-medium">
+            <label htmlFor="price" className="text-lg font-medium">
               Price ₹
             </label>
             <input
@@ -211,25 +262,25 @@ const AddItemPage = () => {
               </span>
             )}
           </div>
-          <div className="flex flex-col gap-2 relative">
-            <label htmlFor="title" className="text-lg font-medium">
-              Calories
-            </label>
-            <input
-              type="text"
-              {...register("calories")}
-              className="text-lg px-2 py-1 ring-1 ring-gray-400 outline-primary"
-            />
-            {errors.calories?.message && (
-              <span className="absolute top-2 right-2 text-red-600 text-xs">
-                {errors.calories.message}
-              </span>
-            )}
-          </div>
+            <div className="flex flex-col gap-2 relative">
+              <label htmlFor="quantity" className="text-lg font-medium">
+              Quantity
+              </label>
+              <input
+                type="text"
+                {...register("quantity")}
+                className="text-lg px-2 py-1 ring-1 ring-gray-400 outline-primary"
+              />
+              {errors.quantity?.message && (
+                <span className="absolute top-2 right-2 text-red-600 text-xs">
+                  {errors.quantity.message}
+                </span>
+              )}
+            </div>
         </div>
 
         <div className="flex flex-col gap-2 relative">
-          <label htmlFor="title" className="text-lg font-medium">
+          <label htmlFor="description" className="text-lg font-medium">
             Description
           </label>
           <input
