@@ -111,7 +111,7 @@ const ItemPage = () => {
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <span className="text-base sm:text-lg py-2 block">
                   Available offers
                 </span>
@@ -142,7 +142,7 @@ const ItemPage = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           {similarItems && similarItems.length !== 0 && (
