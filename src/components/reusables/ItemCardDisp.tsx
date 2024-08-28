@@ -1,10 +1,5 @@
 import { RiEditCircleFill } from "react-icons/ri";
 import { Item } from "../../store/slices/itemsSlice";
-<<<<<<< HEAD
-=======
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
->>>>>>> 1dcdb2a71ce5a7b6f77404e2cccfd5d63131dae7
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 
@@ -13,11 +8,6 @@ interface ItemCardProps {
 }
 
 const ItemCardDisp = ({ item }: ItemCardProps) => {
-<<<<<<< HEAD
-=======
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const dispath = useDispatch();
->>>>>>> 1dcdb2a71ce5a7b6f77404e2cccfd5d63131dae7
   const navigate = useNavigate();
 
   // const isCartItem =
