@@ -10,6 +10,10 @@ import {
   getDoc,
   getDocs,
   query,
+<<<<<<< HEAD
+=======
+  updateDoc,
+>>>>>>> 1dcdb2a71ce5a7b6f77404e2cccfd5d63131dae7
   where,
 } from "firebase/firestore";
 import { zodResolver } from "@hookform/resolvers/zod";
