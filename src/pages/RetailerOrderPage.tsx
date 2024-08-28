@@ -6,8 +6,9 @@ const RetailerOrderPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = new URLSearchParams(location.search);
-  const retailerId = searchParams.get("retailerId");
+  // const searchParams = new URLSearchParams(location.search);
+  // const retailerId = searchParams.get("retailerId");
+  const retailerId = localStorage.getItem("uid");
 
   useEffect(() => {
     const fetchOrders = async () => {

@@ -6,9 +6,10 @@ const DeliveryOrderPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const searchParams = new URLSearchParams(location.search);
-  const deliveryId = searchParams.get("deliveryId");
-
+  // const searchParams = new URLSearchParams(location.search);
+  // const deliveryId = searchParams.get("deliveryId");
+  const deliveryId = localStorage.getItem("uid");
+  
   useEffect(() => {
     const fetchOrders = async () => {
       if (deliveryId) {

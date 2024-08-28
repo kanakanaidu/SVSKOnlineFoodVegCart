@@ -65,7 +65,12 @@ const Header = () => {
         // @ts-ignore
         const adminEmails = adminEmailsString?.REACT_APP_ADMIN_EMAILS;
         const userRole = adminEmails.includes(user.email) ? "admin" : "user";
-        setRole(userRole);
+        const role = localStorage.getItem("userRole");
+        if (userRole != "admin") {
+          setRole(role);
+        } else {
+          setRole(userRole);
+        }
       }
       setLoading(false);
     };
@@ -105,6 +110,7 @@ const Header = () => {
 
   const logout = () => {
     setIsUserMenuOpen(false);
+    setRole(null);
     localStorage.clear();
     dispatch(setUser(null));
   };
@@ -304,6 +310,15 @@ const Header = () => {
                           className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
                         >
                           <p>My Orders</p>
+                          <TbShoppingCart className="text-[1.35rem]" />
+                        </Link>
+                      )}
+                      {role == "retailer" && (
+                        <Link
+                          to="/myitemlist"
+                          className="flex justify-between px-6 py-2 gap-2 border-t border-gray-600 items-center hover:bg-primary hover:text-white transition"
+                        >
+                          <p>My Items</p>
                           <TbShoppingCart className="text-[1.35rem]" />
                         </Link>
                       )}

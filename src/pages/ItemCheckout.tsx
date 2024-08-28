@@ -34,7 +34,7 @@ const ItemCheckout = () => {
   // });
   useEffect(() => {
     const fetchItem = async () => {
-      const docRef = doc(firestore, "foodItems", params.itemId);
+      const docRef = doc(firestore, "items", params.itemId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const item = docSnap.data() as Item;

@@ -26,6 +26,9 @@ import { ToastContainer } from "react-toastify";
 import DeliveryOrderPage from "./pages/DeliveryOrderPage.tsx";
 import Unauthorized from "./components/Unauthorized.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import { ItemListPage } from "./pages/Item/AllItemsPage.tsx";
+import EditItemPage from "./pages/Item/EditItemPage.tsx";
+import { MyItemListPage } from "./pages/Item/MyItemsPage.tsx";
 // import ComingSoon from "./pages/ComingSoon.tsx";
 
 const router = createBrowserRouter([
@@ -101,6 +104,18 @@ const router = createBrowserRouter([
       {
         path: "/item/:itemId",
         element: <ItemPage />,
+      },
+      {
+        path: "/itemlist",
+        element: <ProtectedRoute element={<ItemListPage />} allowedRoles={["admin"]} />,
+      },
+      {
+        path: "/myitemlist",
+        element: <ProtectedRoute element={<MyItemListPage />} allowedRoles={["retailer"]} />,
+      },
+      {
+        path: "/edititem/:id",
+        element: <ProtectedRoute element={<EditItemPage />} allowedRoles={["admin", "retailer"]} />,
       },
       {
         path: "/unauthorized",
