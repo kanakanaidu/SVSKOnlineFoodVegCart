@@ -12,7 +12,7 @@ const PartnerLogin: React.FC = () => {
   const [error, setError] = useState<string>("");
   // @ts-ignore
   const [role, setRole] = useState<string | null>(null);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,40 +20,37 @@ const PartnerLogin: React.FC = () => {
     event.preventDefault();
 
     try {
-    //   const userCredential = await signInWithEmailAndPassword(
-    //     auth,
-    //     email,
-    //     password
-    //   );
-    // const user = userCredential.user;
+      //   const userCredential = await signInWithEmailAndPassword(
+      //     auth,
+      //     email,
+      //     password
+      //   );
+      // const user = userCredential.user;
       const {
         user: { uid, refreshToken, providerData },
-      } = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      dispatch(setUser({ refreshToken, ...providerData[0]  }));
+      } = await signInWithEmailAndPassword(auth, email, password);
+      dispatch(setUser({ refreshToken, ...providerData[0] }));
       localStorage.setItem(
         "user",
         JSON.stringify({ refreshToken, ...providerData[0] })
       );
+      localStorage.setItem("uid", uid);
       // Check if user is a retailer
       const retailerDoc = await getDoc(doc(firestore, "retailers", uid));
       if (retailerDoc.exists()) {
         setRole("retailer");
-        localStorage.setItem("userRole","retailer");
-        navigate(`/retailerOrderPage?retailerId=${uid}`);
+        localStorage.setItem("userRole", "retailer");
+        // navigate(`/retailerOrderPage?retailerId=${uid}`);
+        navigate("/retailerOrderPage");
         return;
       }
       // Check if user is a retailer
-      const deliveryDoc = await getDoc(
-        doc(firestore, "deliveryBoys", uid)
-      );
+      const deliveryDoc = await getDoc(doc(firestore, "deliveryBoys", uid));
       if (deliveryDoc.exists()) {
         setRole("dBoy");
-        localStorage.setItem("userRole","dBoy");
-        navigate(`/deliveryOrderPage?deliveryId=${uid}`);
+        localStorage.setItem("userRole", "dBoy");
+        // navigate(`/deliveryOrderPage?deliveryId=${uid}`);
+        navigate("/deliveryOrderPage");
         return;
       }
       setError("User not found. Please check your email and password.");
@@ -65,9 +62,7 @@ const PartnerLogin: React.FC = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="max-w-md w-full bg-white p-8 border border-gray-200 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Partner's Login
-        </h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Partner's Login</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

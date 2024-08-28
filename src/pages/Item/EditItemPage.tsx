@@ -1,37 +1,34 @@
-import { z } from "zod";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { BiSolidCloudUpload, BiLoaderAlt } from "react-icons/bi";
 import { useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { BiSolidCloudUpload, BiLoaderAlt } from "react-icons/bi";
+import { RxCross2 } from "react-icons/rx";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { CategoriesContext } from "../../App";
+import { firestore, storage } from "../../../firebase.config";
 import {
   deleteObject,
   getDownloadURL,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { firestore, storage } from "../../../firebase.config";
-import { RxCross2 } from "react-icons/rx";
-import { motion } from "framer-motion";
-import { saveItem } from "../../utils/firebaseFunctions";
-import { CategoriesContext } from "../../App";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { Retailer } from "../../store/types";
+import { deleteItem, updateItem } from "../../utils/firebaseFunctions";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-// export const categories = [
-//   "fruits",
-//   "food",
-//   "groceries",
-//   "vegetables",
-//   "fashion",
-//   "mobile accessories",
-//   "icecreams",
-//   "meet",
-//   "drinks",
-// ] as const;
-
+// Validation schema (same as AddItemPage)
 const formSchema = z.object({
+  id: z.string().min(1, { message: "ID not there" }),
   title: z.string().min(1, { message: "Title is required!!" }),
   imageUrl: z.string().min(1, { message: "Image is required!!" }),
   price: z.string().min(1, { message: "Price is required!!" }),
@@ -39,32 +36,34 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "Category is required!!" }),
   retailer: z.string().min(1, { message: "Retailer is required!!" }),
   quantity: z.string().min(1, { message: "Quantity is required!!" }),
-  // calories: z.string().min(1, { message: "Calories is required!!" }),
-  // category: z.enum(categories),
+  //   category: z.enum(categories),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-const AddItemPage = () => {
+const EditItemPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>(); // Get the item ID from the URL
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  //   const [itemData, setItemData] = useState<any>(null);
   const categories = useContext(CategoriesContext);
-  const [isImageUploading, setIsImageUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [retailers, setRetailers] = useState<Retailer[]>([]);
+  const [selectedRetailer, setSelectedRetailer] = useState<string | null>("");
+  const retailerId = localStorage.getItem("uid");
+  const userRole = localStorage.getItem("userRole");
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
-    reset,
     setValue,
   } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
+    mode: "onSubmit",
   });
-  const [retailers, setRetailers] = useState<Retailer[]>([]);
-  const [selectedRetailer, setSelectedRetailer] = useState<string | null>("");
-  // const [selectedCategories, setSelectedCategories] = useState<string>("");
-  const retailerId = localStorage.getItem("uid");
-  const userRole = localStorage.getItem("userRole");
 
   useEffect(() => {
     const fetchRetailers = async () => {
@@ -90,34 +89,73 @@ const AddItemPage = () => {
 
         if (fetchedRetailers.length > 0) {
           setSelectedRetailer(fetchedRetailers[0].id);
-          setValue("retailer", fetchedRetailers[0].id)
         }
       } catch (error) {
         console.error("Error fetching retailers: ", error);
       }
     };
 
-    fetchRetailers();
-  }, []);
+    const fetchItemData = async () => {
+      // Ensure that `id` is a non-null string
+      if (!id) {
+        throw new Error("Document ID is required");
+      }
+      console.log("itemid: ", id);
 
-  const onSubmit = handleSubmit(async (data) => {
+      const docRef = doc(firestore, "items", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        // setItemData(docSnap.data());
+        setFormValues(data); // Populate the form fields
+        setLoading(false);
+      } else {
+        console.log("No such document!");
+        navigate("/404");
+      }
+    };
+
+    fetchRetailers();
+    fetchItemData();
+  }, [id, navigate]);
+
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     try {
-      const itemData = { id: crypto.randomUUID(), ...data };
-      saveItem(itemData);
-      toast.success("Item added successfully!");
-      reset();
-      setImageUrl(null);
-      
+      if (id) {
+        // const docRef = doc(firestore, "items", id);
+        // await updateDoc(docRef, data);
+        await updateItem(data);
+        toast.success("Item updated successfully!");
+        setTimeout(() => {
+          if (userRole == "admin") navigate("/itemlist");
+          // Redirect to items list after successful update
+          else navigate("/myitemlist");
+        }, 100); // Delay navigation slightly to allow alert to show
+      } else {
+        console.log("No ID provided");
+        toast.warning("No ID provided");
+      }
     } catch (error) {
-      console.log("Error while submiting the form: ", error);
-      toast.error(`Error while submiting the form: ${error}`);
+      console.error("Error updating document:", error);
+      toast.error(`Error updating document: ${error}`);
     }
-    setTimeout(() => {
-      if (userRole == "admin")
-        navigate("/itemlist"); // Redirect to items list after successful update
-      else navigate("/myitemlist");
-    }, 100); // Delay navigation slightly to allow alert to show
-  });
+  };
+
+  const setFormValues = (data: any) => {
+    setValue("id", data.id);
+    setValue("title", data.title);
+    setValue("quantity", data.quantity);
+    setValue("category", data.category);
+    setValue("retailer", data.retailer);
+    setValue("price", data.price);
+    setValue("description", data.description);
+    setValue("imageUrl", data.imageUrl);
+    setImageUrl(data.imageUrl);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const getImageUrl = (files: any, onChangeReactHookForm: any) => {
     setIsImageUploading(true);
@@ -154,12 +192,46 @@ const AddItemPage = () => {
       setImageUrl(null);
     });
   };
+
+  const handleDelete = async () => {
+    try {
+      if (id) {
+        removeImage();
+        await deleteItem(id);
+        toast.success(`Item deleted successfully! ID: ${id}`);
+      }
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+      toast.error(`Error deleting document: ${error}`);
+    }
+    setTimeout(() => {
+      if (userRole == "admin") navigate("/itemlist");
+      // Redirect to items list after successful update
+      else navigate("/myitemlist");
+    }, 100); // Delay navigation slightly to allow alert to show
+  };
+
   return (
     <div className="w-full flex justify-center items-center bg-contain bg-no-repeat bg-[url('/images/add-item-bg.png')]">
       <form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="z-10 backdrop-blur-lg w-[600px] border border-gray-400 rounded-md p-4 flex flex-col gap-4 shadow-xl"
       >
+        {/* <div className="flex flex-col gap-2 relative">
+          <label htmlFor="id" className="text-lg font-medium">
+            ID
+          </label>
+          <input
+            {...register("id")}
+            type="text"
+            className="text-lg px-2 py-1 ring-1 ring-gray-400 outline-primary"
+          />
+          {errors.id && errors.id.message && (
+            <span className="absolute top-2 right-2 text-red-600 text-xs">
+              {errors.id.message}
+            </span>
+          )}
+        </div> */}
         <div className="flex flex-col gap-2 relative">
           <label htmlFor="title" className="text-lg font-medium">
             Title
@@ -169,7 +241,7 @@ const AddItemPage = () => {
             type="text"
             className="text-lg px-2 py-1 ring-1 ring-gray-400 outline-primary"
           />
-          {errors.title?.message && (
+          {errors.title && errors.title.message && (
             <span className="absolute top-2 right-2 text-red-600 text-xs">
               {errors.title.message}
             </span>
@@ -262,7 +334,7 @@ const AddItemPage = () => {
             {...register("retailer")}
             name="retailer"
             id="retailer"
-            value={userRole == "retailer" ? selectedRetailer || "" : ""}
+            value={userRole == "retailer" ? selectedRetailer || "" : undefined}
             disabled={userRole == "retailer" ? true : false}
             // onChange={(e) => setSelectedRetailer(e.target.value)}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
@@ -277,11 +349,11 @@ const AddItemPage = () => {
               </option>
             ))}
           </select>
-          {errors.retailer && (
+          {/* {errors.retailer && (
             <span className="absolute top-2 right-2 text-red-600 text-xs">
               {errors.retailer.message}
             </span>
-          )}
+          )} */}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex flex-col gap-2 relative">
@@ -331,18 +403,36 @@ const AddItemPage = () => {
             </span>
           )}
         </div>
-        <motion.button
-          whileTap={{
-            scale: 0.95,
-          }}
-          disabled={isSubmitting}
-          className="disabled:bg-blue-500 text-lg font-semibold tracking-wide bg-primary p-2 text-white hover:bg-primaryHover"
-        >
-          Submit
-        </motion.button>
+        <ul>
+          {Object.entries(errors).map(([field, error]) => (
+            <li key={field}>{error?.message}</li>
+          ))}
+        </ul>
+        <div className="flex space-x-4 justify-center">
+          <motion.button
+            whileTap={{
+              scale: 0.95,
+            }}
+            disabled={isSubmitting}
+            type="submit"
+            className="disabled:bg-blue-500 text-lg font-semibold tracking-wide bg-primary p-2 text-white hover:bg-primaryHover"
+          >
+            Update Item
+          </motion.button>
+          <motion.button
+            whileTap={{
+              scale: 0.95,
+            }}
+            type="button"
+            onClick={() => handleDelete()}
+            className="disabled:bg-red-500 text-lg font-semibold tracking-wide bg-primary p-2 text-white hover:bg-primaryHover"
+          >
+            Delete Item
+          </motion.button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default AddItemPage;
+export default EditItemPage;

@@ -19,6 +19,7 @@ export interface Item {
   imageUrl: string;
   price: string;
   title: string;
+  retailer?: string;
 }
 
 interface ItemsState {

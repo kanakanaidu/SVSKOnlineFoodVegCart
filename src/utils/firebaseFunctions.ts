@@ -1,39 +1,60 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { firestore } from "../../firebase.config";
 import { Item } from "../store/slices/itemsSlice";
+
+const itemstbl = "items";
 
 interface Config {
   configValue: string;
 }
 
 export const saveItem = async (data: any) => {
-  await setDoc(doc(firestore, "foodItems", crypto.randomUUID()), data, {
+  const id = crypto.randomUUID();
+  data.id = id; // Set the ID field in the data to match the document ID
+  await setDoc(doc(firestore, itemstbl, id), data, {
     merge: true,
   });
 };
 
+export const updateItem = async (data: any) => {
+  const id = data.id;
+  if (id) {
+    const docRef = doc(firestore, itemstbl, id);
+    await updateDoc(docRef, data);
+  }
+};
+
+export const deleteItem = async (id: any)=>{
+    if (id) {
+      const docRef = doc(firestore, itemstbl, id);
+      await deleteDoc(docRef);
+    }
+}
+
 export const getItems = async () => {
-  const items = await getDocs(query(collection(firestore, "foodItems")));
+  const items = await getDocs(query(collection(firestore, itemstbl)));
   return items.docs.map((doc) => {
     return { databaseId: doc.id, ...doc.data() };
   });
 };
 
 export const getItemWithId = async (id: string) => {
-  const docRef = doc(firestore, "foodItems", id);
+  const docRef = doc(firestore, itemstbl, id);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
     const item = { ...docSnap.data(), databaseId: docSnap.id } as Item;
-    const itemsRef = collection(firestore, "foodItems");
+    const itemsRef = collection(firestore, itemstbl);
     const q = query(itemsRef, where("category", "==", item.category));
     const querySnapshot = await getDocs(q);
     const similarItems = querySnapshot.docs.map((doc) => {
@@ -53,7 +74,7 @@ export const getItemWithId = async (id: string) => {
 };
 
 export const searchItemWithTitle = async (title: string) => {
-  const foodItemsRef = collection(firestore, "foodItems");
+  const foodItemsRef = collection(firestore, itemstbl);
   const q = query(
     foodItemsRef,
     where("title", ">=", title.toLowerCase()),
