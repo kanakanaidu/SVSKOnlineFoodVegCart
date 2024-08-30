@@ -17,6 +17,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Search from "./Search.tsx";
 import { BsSearch } from "react-icons/bs";
 import { fetchConfig } from "../utils/firebaseFunctions.ts";
+import { setUserRole } from "../utils/userService.ts";
 
 const firebaseAuth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -98,11 +99,13 @@ const Header = () => {
         ? "admin"
         : "user";
       setRole(userRole);
+      if (providerData[0]) setUserRole(providerData[0], userRole);
       localStorage.setItem("userRole", userRole);
       localStorage.setItem(
         "user",
         JSON.stringify({ refreshToken, ...providerData[0] })
       );
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }

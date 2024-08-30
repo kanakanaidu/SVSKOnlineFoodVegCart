@@ -8,8 +8,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import sendWhatsApp from "../utils/sendMessage";
 import { toast } from "react-toastify";
 import { fetchConfig } from "../utils/firebaseFunctions";
+import { useNavigate } from "react-router-dom";
 
 const DeliveryBoyRegistration: React.FC = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -54,7 +56,7 @@ const DeliveryBoyRegistration: React.FC = () => {
       //     location: selectedLocation,
       //     status: "pending",
       // });
-      toast.success("Registration submitted 😀, awaiting approval.");
+      toast.success(`Registration successful for ${name} 😀`);
       // const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: password will be shared once admin approved your account.`;
       const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\nAccount Type: Delivery Partner`;
       await sendWhatsApp(phone, whatsappMessage);
@@ -67,6 +69,7 @@ const DeliveryBoyRegistration: React.FC = () => {
       setIdentity("");
       setAddress("");
       setSelectedLocation(null);
+      navigate("/admin");
     } catch (error) {
       console.error("Error submitting registration", error, "🙄");
       toast.error(`Error submitting registration: ${error} 🙄`);

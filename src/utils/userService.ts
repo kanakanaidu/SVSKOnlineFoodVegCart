@@ -20,7 +20,7 @@ export const getUserRole = async (uid: string): Promise<any> => {
   //   });
 };
 
-export const setUserRole = async (user: User): Promise<string> => {
+export const setUserRole = async (user: User, userRole: string): Promise<string> => {
   const userDoc = await getDoc(doc(firestore, "users", user.uid));
 
   if (!userDoc.exists()) {
@@ -28,12 +28,12 @@ export const setUserRole = async (user: User): Promise<string> => {
       doc(firestore, "users", user.uid),
       {
         email: user.email,
-        role: "user",
+        role: userRole,
       }
       // ,
       // { merge: true }
     );
   }
-  const role = userDoc.exists() ? userDoc.data().role : "user"
-  return role;
+  // const role = userDoc.exists() ? userDoc.data().role : "user"
+  return userRole;
 };

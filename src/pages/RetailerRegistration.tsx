@@ -9,8 +9,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import sendWhatsApp from "../utils/sendMessage";
 import { toast } from "react-toastify";
 import { fetchConfig } from "../utils/firebaseFunctions";
+import { useNavigate } from "react-router-dom";
 
 const RetailerRegistration: React.FC = () => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -57,7 +60,7 @@ const RetailerRegistration: React.FC = () => {
       //     status: "pending",
       //     password
       // });
-      toast.success("Registration submitted 😀, awaiting approval.");
+      toast.success(`Registration successful for ${name} 😀`);
       // const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: password will be shared once admin approved your account.`;
       const whatsappMessage = `Hello ${name},\nYour account has been created.\nEmail: ${email}\nPassword: ${password}\nAccount Type: Retailer`;
       // const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -72,6 +75,7 @@ const RetailerRegistration: React.FC = () => {
       setIdentity("");
       setAddress("");
       setSelectedLocation(null);
+      navigate("/admin");
     } catch (error) {
       console.error("Error submitting registration", error, "🙄");
       toast.error(`Error submitting registration: ${error} 🙄`);

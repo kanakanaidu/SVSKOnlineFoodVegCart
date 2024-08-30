@@ -5,6 +5,7 @@ import { auth, firestore } from "../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { setUser } from "../store/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { setUserRole } from "../utils/userService";
 
 const PartnerLogin: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -40,6 +41,7 @@ const PartnerLogin: React.FC = () => {
       if (retailerDoc.exists()) {
         setRole("retailer");
         localStorage.setItem("userRole", "retailer");
+        if (providerData[0]) setUserRole(providerData[0], "retailer");
         // navigate(`/retailerOrderPage?retailerId=${uid}`);
         navigate("/retailerOrderPage");
         return;
@@ -49,6 +51,7 @@ const PartnerLogin: React.FC = () => {
       if (deliveryDoc.exists()) {
         setRole("dBoy");
         localStorage.setItem("userRole", "dBoy");
+        if (providerData[0]) setUserRole(providerData[0], "dBoy");
         // navigate(`/deliveryOrderPage?deliveryId=${uid}`);
         navigate("/deliveryOrderPage");
         return;
