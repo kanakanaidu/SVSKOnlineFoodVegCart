@@ -114,6 +114,7 @@ const Header = () => {
   const logout = () => {
     setIsUserMenuOpen(false);
     setRole(null);
+    navigate("/home");
     localStorage.clear();
     dispatch(setUser(null));
   };
