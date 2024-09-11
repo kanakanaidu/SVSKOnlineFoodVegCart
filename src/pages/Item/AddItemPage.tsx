@@ -61,6 +61,7 @@ const AddItemPage = () => {
     resolver: zodResolver(formSchema),
   });
   const [retailers, setRetailers] = useState<Retailer[]>([]);
+  // @ts-ignore
   const [selectedRetailer, setSelectedRetailer] = useState<string | null>("");
   // const [selectedCategories, setSelectedCategories] = useState<string>("");
   const retailerId = localStorage.getItem("uid");
@@ -90,7 +91,7 @@ const AddItemPage = () => {
 
         if (fetchedRetailers.length > 0) {
           setSelectedRetailer(fetchedRetailers[0].id);
-          setValue("retailer", fetchedRetailers[0].id)
+          setValue("retailer", fetchedRetailers[0].id);
         }
       } catch (error) {
         console.error("Error fetching retailers: ", error);
@@ -107,7 +108,6 @@ const AddItemPage = () => {
       toast.success("Item added successfully!");
       reset();
       setImageUrl(null);
-      
     } catch (error) {
       console.log("Error while submiting the form: ", error);
       toast.error(`Error while submiting the form: ${error}`);
